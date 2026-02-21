@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBlog — Premium</title>
+  <style>
+    :root {
+      --bg: #0d0d1a;
+      --bg2: #13132a;
+      --bg3: #1a1a35;
+      --card: #1e1e3a;
+      --card2: #252548;
+      --border: #2e2e5e;
+      --purple: #7c3aed;
+      --purple2: #6d28d9;
+      --purple3: #8b5cf6;
+      --purple-glow: rgba(124,58,237,0.3);
+      --text: #e2e8f0;
+      --text2: #a0aec0;
+      --text3: #718096;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+    /* ===== AUTH PAGE ===== */
+    #authPage {
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+    }
+    .auth-wrap { width: 100%; max-width: 420px; padding: 20px; }
+    .auth-logo {
+      text-align: center; margin-bottom: 30px;
+    }
+    .auth-logo h1 { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+    .auth-logo h1 span { color: var(--purple3); }
+    .auth-logo p { color: var(--text3); font-size: 13px; margin-top: 5px; }
+    .auth-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 0 40px rgba(124,58,237,0.1);
+    }
+    .tabs { display: flex; background: var(--bg2); border-radius: 8px; padding: 4px; margin-bottom: 24px; }
+    .tab {
+      flex: 1; padding: 9px; text-align: center; cursor: pointer;
+      background: none; border: none; font-size: 14px; color: var(--text3);
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .tab.active { background: var(--purple); color: white; font-weight: 600; }
+
+    /* ===== MAIN PAGE ===== */
+    #mainPage { display: none; }
+
+    .navbar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky; top: 0; z-index: 200;
+    }
+    .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--purple3); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-user { display: flex; align-items: center; gap: 8px; }
+    .nav-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--purple3));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: white;
+    }
+    .nav-name { font-size: 13px; color: var(--text2); }
+    .verified-badge { color: var(--purple3); font-size: 13px; }
+
+    /* Notification Bell */
+    .notif-btn {
+      position: relative; background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text2); padding: 7px 10px; border-radius: 8px; cursor: pointer;
+      font-size: 16px; transition: all 0.2s;
+    }
+    .notif-btn:hover { border-color: var(--purple); color: var(--purple3); }
+    .notif-count {
+      position: absolute; top: -5px; right: -5px;
+      background: var(--red); color: white; font-size: 10px;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; display: none;
+    }
+
+    /* Notification Panel */
+    .notif-panel {
+      position: fixed; top: 65px; right: 15px;
+      width: 320px; max-height: 420px; overflow-y: auto;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      z-index: 300; display: none;
+    }
+    .notif-panel.show { display: block; }
+    .notif-header {
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .notif-header span { font-size: 14px; font-weight: 600; }
+    .notif-clear { font-size: 12px; color: var(--purple3); cursor: pointer; background: none; border: none; }
+    .notif-item {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13px; line-height: 1.5;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item.unread { background: rgba(124,58,237,0.08); }
+    .notif-item .notif-time { font-size: 11px; color: var(--text3); margin-top: 4px; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+    .dot-success { background: var(--green); }
+    .dot-warning { background: var(--yellow); }
+    .dot-danger { background: var(--red); }
+    .dot-info { background: var(--blue); }
+    .no-notif { padding: 30px; text-align: center; color: var(--text3); font-size: 13px; }
+
+    /* NAV BUTTONS */
+    .nbtn {
+      padding: 7px 14px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; border: none; font-weight: 600; transition: all 0.2s;
+    }
+    .nbtn-write { background: var(--purple); color: white; }
+    .nbtn-write:hover { background: var(--purple2); }
+    .nbtn-help { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); }
+    .nbtn-help:hover { border-color: var(--purple); color: var(--purple3); }
+    .nbtn-logout { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+    .nbtn-logout:hover { background: rgba(239,68,68,0.25); }
+
+    /* ===== LAYOUT ===== */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 28px 16px; }
+
+    /* ===== VIEWS ===== */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ===== WRITE FORM ===== */
+    .write-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 24px;
+    }
+    .write-card h3 { font-size: 17px; margin-bottom: 18px; color: var(--text); }
+
+    /* ===== BLOG CARDS ===== */
+    .blog-grid { display: flex; flex-direction: column; gap: 14px; }
+    .blog-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 22px; cursor: pointer;
+      transition: all 0.25s; position: relative; overflow: hidden;
+    }
+    .blog-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--purple); opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .blog-card:hover { border-color: var(--purple); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(124,58,237,0.15); }
+    .blog-card:hover::before { opacity: 1; }
+    .blog-card-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .blog-card-preview { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+    .blog-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text3); }
+    .blog-author { display: flex; align-items: center; gap: 6px; }
+    .author-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--purple3));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: white;
+    }
+    .btn-del-sm {
+      background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+      color: var(--red); padding: 4px 10px; border-radius: 6px;
+      cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+    .btn-del-sm:hover { background: rgba(239,68,68,0.3); }
+    .no-blogs { text-align: center; padding: 60px 20px; color: var(--text3); }
+    .no-blogs .icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ===== BLOG DETAIL ===== */
+    .detail-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 30px;
+    }
+    .detail-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 10px; line-height: 1.3; }
+    .detail-meta-bar {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      margin-bottom: 22px; font-size: 13px; color: var(--text3);
+    }
+    .detail-content { font-size: 15px; line-height: 1.9; color: var(--text2); white-space: pre-wrap; }
+
+    /* ===== HELP CENTER ===== */
+    .help-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 16px;
+    }
+    .help-card h3 { font-size: 17px; margin-bottom: 16px; }
+    .ticket-item {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px; margin-bottom: 10px;
+    }
+    .ticket-subject { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .ticket-msg { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+    .ticket-reply {
+      background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 8px; padding: 10px; margin-top: 8px; font-size: 13px; color: var(--purple3);
+    }
+    .ticket-footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text3); }
+    .status-badge {
+      padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+    }
+    .status-open { background: rgba(245,158,11,0.2); color: var(--yellow); }
+    .status-replied { background: rgba(124,58,237,0.2); color: var(--purple3); }
+    .status-closed { background: rgba(16,185,129,0.2); color: var(--green); }
+
+    /* ===== SECTION HEADER ===== */
+    .sec-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px;
+    }
+    .sec-title { font-size: 20px; font-weight: 800; }
+    .sec-sub { color: var(--text3); font-size: 13px; margin-top: 2px; }
+
+    /* ===== BACK BTN ===== */
+    .back-btn {
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text2); padding: 7px 14px; border-radius: 8px;
+      cursor: pointer; font-size: 13px; margin-bottom: 18px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .back-btn:hover { border-color: var(--purple); color: var(--purple3); }
+
+    /* ===== COMMON FORM ===== */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--text2); font-weight: 500; }
+    input[type="text"], input[type="email"], input[type="password"], textarea, select {
+      width: 100%; padding: 10px 13px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text);
+      font-family: inherit; transition: border 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+    textarea { resize: vertical; }
+    .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; border: none; transition: all 0.2s; }
+    .btn-purple { background: var(--purple); color: white; }
+    .btn-purple:hover { background: var(--purple2); }
+    .btn-full { width: 100%; }
+    .btn-ghost { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); }
+    .btn-ghost:hover { border-color: var(--purple); color: var(--purple3); }
+
+    .msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 12px; display: none; }
+    .msg.success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: var(--green); display: block; }
+    .msg.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red); display: block; }
+
+    .visitor-info { text-align: center; margin-top: 14px; font-size: 12px; color: var(--text3); }
+    .hidden { display: none; }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+    /* Verification request badge */
+    .verify-request-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.4);
+      color: var(--purple3); padding: 5px 12px; border-radius: 6px;
+      cursor: pointer; font-size: 13px; font-weight: 600;
+    }
+    .verified-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+      color: var(--green); padding: 4px 10px; border-radius: 6px; font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== AUTH PAGE ===== -->
+<div id="authPage">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>Nex<span>Blog</span></h1>
+      <p>Premium Blogging Platform</p>
+    </div>
+    <div class="auth-box">
+      <div class="tabs">
+        <button class="tab active" id="loginTab" onclick="showTab('login')">Login</button>
+        <button class="tab" id="signupTab" onclick="showTab('signup')">Sign Up</button>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-purple btn-full">Login করুন</button>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <div class="form-group">
+          <label>পুরো নাম</label>
+          <input type="text" id="signupName" placeholder="আপনার নাম" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="signupEmail" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" placeholder="কমপক্ষে ৬ অক্ষর" required>
+        </div>
+        <button type="submit" class="btn btn-purple btn-full">Account তৈরি করুন</button>
+      </form>
+
+      <div class="msg" id="authMsg"></div>
+      <div class="visitor-info" id="visitorInfo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<div id="mainPage">
+  <nav class="navbar">
+    <div class="nav-logo">Nex<span>Blog</span></div>
+    <div class="nav-right">
+      <button class="nbtn nbtn-write" onclick="goTo('write')">✏️ লিখুন</button>
+      <button class="nbtn nbtn-help" onclick="goTo('help')">🎫 Help</button>
+      <button class="notif-btn" onclick="toggleNotif()" id="notifBtn">
+        🔔<span class="notif-count" id="notifCount">0</span>
+      </button>
+      <div class="nav-user">
+        <div class="nav-avatar" id="navAvatar"></div>
+        <div>
+          <div class="nav-name" id="navName"></div>
+        </div>
+      </div>
+      <button class="nbtn nbtn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Notification Panel -->
+  <div class="notif-panel" id="notifPanel">
+    <div class="notif-header">
+      <span>🔔 Notifications</span>
+      <button class="notif-clear" onclick="markAllRead()">সব পড়া হয়েছে</button>
+    </div>
+    <div id="notifList"><div class="no-notif">কোনো notification নেই</div></div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- ===== HOME VIEW ===== -->
+    <div class="view active" id="homeView">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">সকল Article</div>
+          <div class="sec-sub" id="homeSubtitle"></div>
+        </div>
+      </div>
+      <div class="blog-grid" id="blogList">
+        <div class="no-blogs"><div class="icon">📝</div>Loading...</div>
+      </div>
+    </div>
+
+    <!-- ===== WRITE VIEW ===== -->
+    <div class="view" id="writeView">
+      <div class="sec-header">
+        <div><div class="sec-title">✏️ নতুন Article</div></div>
+        <button class="back-btn" onclick="goTo('home')">← ফিরে যান</button>
+      </div>
+      <div class="write-card">
+        <form id="blogForm">
+          <div class="form-group">
+            <label>Article এর Title</label>
+            <input type="text" id="blogTitle" placeholder="আপনার article এর শিরোনাম লিখুন..." required>
+          </div>
+          <div class="form-group">
+            <label>Article এর বিষয়বস্তু</label>
+            <textarea id="blogContent" rows="12" placeholder="এখানে আপনার article লিখুন..." required></textarea>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button type="submit" class="btn btn-purple">🚀 প্রকাশ করুন</button>
+            <button type="button" class="btn btn-ghost" onclick="goTo('home')">বাতিল</button>
+          </div>
+        </form>
+        <div class="msg" id="blogMsg"></div>
+      </div>
+    </div>
+
+    <!-- ===== DETAIL VIEW ===== -->
+    <div class="view" id="detailView">
+      <button class="back-btn" onclick="goTo('home')">← সব Article</button>
+      <div class="detail-card">
+        <h2 id="detailTitle"></h2>
+        <div class="detail-meta-bar">
+          <span id="detailAuthor"></span>
+          <span>•</span>
+          <span id="detailDate"></span>
+        </div>
+        <div class="detail-content" id="detailContent"></div>
+      </div>
+    </div>
+
+    <!-- ===== HELP VIEW ===== -->
+    <div class="view" id="helpView">
+      <div class="sec-header">
+        <div><div class="sec-title">🎫 Help Center</div><div class="sec-sub">Support team-এর সাথে যোগাযোগ করুন</div></div>
+        <button class="back-btn" onclick="goTo('home')">← ফিরে যান</button>
+      </div>
+
+      <!-- Verification Request -->
+      <div class="help-card" id="verifySection">
+        <h3>✅ ID Verification</h3>
+        <p style="font-size:13px; color:var(--text2); margin-bottom:14px;">আপনার account verify করলে profile-এ verified badge পাবেন।</p>
+        <div id="verifyStatus"></div>
+      </div>
+
+      <!-- New Ticket -->
+      <div class="help-card">
+        <h3>📩 নতুন Support Ticket</h3>
+        <form id="ticketForm">
+          <div class="form-group">
+            <label>বিষয় (Subject)</label>
+            <input type="text" id="ticketSubject" placeholder="সমস্যার বিষয় লিখুন" required>
+          </div>
+          <div class="form-group">
+            <label>বিস্তারিত বলুন</label>
+            <textarea id="ticketMsg" rows="5" placeholder="আপনার সমস্যা বিস্তারিত লিখুন..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-purple">Ticket পাঠান</button>
+        </form>
+        <div class="msg" id="ticketMsg2"></div>
+      </div>
+
+      <!-- My Tickets -->
+      <div class="help-card">
+        <h3>📋 আমার Tickets</h3>
+        <div id="myTickets"><div style="color:var(--text3); font-size:13px;">Loading...</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+  let currentUser = null;
+  let notifOpen = false;
+
+  // ===== VISITOR =====
+  window.addEventListener('load', async () => {
+    try {
+      const r = await fetch(`${API}/visitor/increment`, { method: 'POST' });
+      const d = await r.json();
+      document.getElementById('visitorInfo').textContent = `👁️ মোট ভিজিটর: ${d.count}`;
+    } catch {}
+  });
+
+  // ===== AUTH =====
+  function showTab(tab) {
+    document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+    document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+    document.getElementById('authMsg').className = 'msg';
+  }
+
+  function showAuthMsg(text, type) {
+    const el = document.getElementById('authMsg');
+    el.textContent = text;
+    el.className = `msg ${type}`;
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    try {
+      const r = await fetch(`${API}/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+      const d = await r.json();
+      if (d.success) { currentUser = d.user; enterMain(); }
+      else showAuthMsg(d.message, 'error');
+    } catch { showAuthMsg('Server এর সাথে যোগাযোগ করা যাচ্ছে না', 'error'); }
+  });
+
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    try {
+      const r = await fetch(`${API}/signup`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email, password}) });
+      const d = await r.json();
+      if (d.success) { showAuthMsg(d.message, 'success'); document.getElementById('signupForm').reset(); }
+      else showAuthMsg(d.message, 'error');
+    } catch { showAuthMsg('Server এর সাথে যোগাযোগ করা যাচ্ছে না', 'error'); }
+  });
+
+  function enterMain() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    const initials = currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('navAvatar').textContent = initials;
+    document.getElementById('navName').textContent = currentUser.name + (currentUser.isVerified ? ' ✓' : '');
+    loadBlogs();
+    loadNotifications();
+  }
+
+  function logout() {
+    currentUser = null;
+    document.getElementById('authPage').style.display = 'flex';
+    document.getElementById('mainPage').style.display = 'none';
+    document.getElementById('loginForm').reset();
+    document.getElementById('authMsg').className = 'msg';
+    goTo('home');
+  }
+
+  // ===== NAVIGATION =====
+  function goTo(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(view + 'View').classList.add('active');
+    if (view === 'home') loadBlogs();
+    if (view === 'help') loadHelpPage();
+    notifOpen = false;
+    document.getElementById('notifPanel').classList.remove('show');
+  }
+
+  // ===== NOTIFICATIONS =====
+  async function loadNotifications() {
+    if (!currentUser) return;
+    try {
+      const r = await fetch(`${API}/notifications/${currentUser._id}`);
+      const d = await r.json();
+      if (!d.success) return;
+
+      const countEl = document.getElementById('notifCount');
+      if (d.unreadCount > 0) {
+        countEl.textContent = d.unreadCount;
+        countEl.style.display = 'flex';
+      } else {
+        countEl.style.display = 'none';
+      }
+
+      const list = document.getElementById('notifList');
+      if (d.notifications.length === 0) {
+        list.innerHTML = '<div class="no-notif">কোনো notification নেই</div>';
+        return;
+      }
+      list.innerHTML = d.notifications.map(n => `
+        <div class="notif-item ${n.isRead ? '' : 'unread'}">
+          <span class="notif-dot dot-${n.type}"></span>${esc(n.message)}
+          <div class="notif-time">${timeAgo(n.createdAt)}</div>
+        </div>
+      `).join('');
+    } catch {}
+  }
+
+  function toggleNotif() {
+    notifOpen = !notifOpen;
+    document.getElementById('notifPanel').classList.toggle('show', notifOpen);
+    if (notifOpen) loadNotifications();
+  }
+
+  async function markAllRead() {
+    if (!currentUser) return;
+    await fetch(`${API}/notifications/read/${currentUser._id}`, { method:'POST' });
+    loadNotifications();
+  }
+
+  document.addEventListener('click', (e) => {
+    if (notifOpen && !e.target.closest('.notif-panel') && !e.target.closest('#notifBtn')) {
+      notifOpen = false;
+      document.getElementById('notifPanel').classList.remove('show');
+    }
+  });
+
+  // ===== BLOGS =====
+  async function loadBlogs() {
+    try {
+      const r = await fetch(`${API}/blogs`);
+      const d = await r.json();
+      const container = document.getElementById('blogList');
+      document.getElementById('homeSubtitle').textContent = `${d.blogs?.length || 0}টি article`;
+
+      if (!d.success || d.blogs.length === 0) {
+        container.innerHTML = '<div class="no-blogs"><div class="icon">📝</div><p>এখনো কোনো article নেই।<br>প্রথম article লিখুন!</p></div>';
+        return;
+      }
+
+      container.innerHTML = d.blogs.map(b => {
+        const preview = b.content.length > 130 ? b.content.slice(0, 130) + '...' : b.content;
+        const date = formatDate(b.createdAt);
+        const isOwner = currentUser && b.authorId === currentUser._id;
+        const initial = b.authorName[0].toUpperCase();
+        return `
+          <div class="blog-card" onclick="viewBlog('${b._id}')">
+            <div class="blog-card-title">${esc(b.title)}</div>
+            <div class="blog-card-preview">${esc(preview)}</div>
+            <div class="blog-meta">
+              <div class="blog-author">
+                <div class="author-dot">${initial}</div>
+                <span>${esc(b.authorName)}</span>
+                <span style="color:var(--border)">•</span>
+                <span>${date}</span>
+              </div>
+              ${isOwner ? `<button class="btn-del-sm" onclick="deleteBlog(event,'${b._id}')">🗑 Delete</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch {}
+  }
+
+  async function viewBlog(id) {
+    try {
+      const r = await fetch(`${API}/blogs/${id}`);
+      const d = await r.json();
+      if (!d.success) return;
+      document.getElementById('detailTitle').textContent = d.blog.title;
+      document.getElementById('detailAuthor').textContent = '✍️ ' + d.blog.authorName;
+      document.getElementById('detailDate').textContent = '📅 ' + formatDate(d.blog.createdAt);
+      document.getElementById('detailContent').textContent = d.blog.content;
+      goTo('detail');
+    } catch {}
+  }
+
+  async function deleteBlog(e, id) {
+    e.stopPropagation();
+    if (!confirm('এই article delete করবেন?')) return;
+    try {
+      const r = await fetch(`${API}/blogs/${id}`, { method:'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id}) });
+      const d = await r.json();
+      if (d.success) { loadBlogs(); loadNotifications(); }
+      else alert(d.message);
+    } catch {}
+  }
+
+  document.getElementById('blogForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('blogTitle').value;
+    const content = document.getElementById('blogContent').value;
+    try {
+      const r = await fetch(`${API}/blogs`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({title, content, authorId: currentUser._id, authorName: currentUser.name}) });
+      const d = await r.json();
+      const msg = document.getElementById('blogMsg');
+      msg.textContent = d.message;
+      msg.className = `msg ${d.success ? 'success' : 'error'}`;
+      if (d.success) {
+        document.getElementById('blogForm').reset();
+        setTimeout(() => { msg.className='msg'; goTo('home'); loadNotifications(); }, 1200);
+      }
+    } catch {}
+  });
+
+  // ===== HELP CENTER =====
+  async function loadHelpPage() {
+    loadMyTickets();
+    const verifyEl = document.getElementById('verifyStatus');
+    if (currentUser.isVerified) {
+      verifyEl.innerHTML = '<div class="verified-tag">✅ আপনার account verified</div>';
+    } else {
+      verifyEl.innerHTML = `
+        <button class="verify-request-btn" onclick="requestVerification()">
+          🔷 Verification Request পাঠান
+        </button>
+        <p style="font-size:12px; color:var(--text3); margin-top:8px;">Admin আপনার request review করে verified করবে।</p>
+      `;
+    }
+  }
+
+  async function requestVerification() {
+    try {
+      const r = await fetch(`${API}/tickets`, {
+        method: 'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          userId: currentUser._id,
+          userName: currentUser.name,
+          userEmail: currentUser.email,
+          subject: '🔷 ID Verification Request',
+          message: `আমি আমার account verify করতে চাই। আমার নাম: ${currentUser.name}, Email: ${currentUser.email}`
+        })
+      });
+      const d = await r.json();
+      if (d.success) {
+        alert('Verification request পাঠানো হয়েছে! Admin শীঘ্রই review করবে।');
+        loadNotifications();
+        loadMyTickets();
+      }
+    } catch {}
+  }
+
+  async function loadMyTickets() {
+    try {
+      const r = await fetch(`${API}/tickets/user/${currentUser._id}`);
+      const d = await r.json();
+      const container = document.getElementById('myTickets');
+      if (!d.success || d.tickets.length === 0) {
+        container.innerHTML = '<div style="color:var(--text3); font-size:13px;">এখনো কোনো ticket নেই।</div>';
+        return;
+      }
+      container.innerHTML = d.tickets.map(t => `
+        <div class="ticket-item">
+          <div class="ticket-subject">${esc(t.subject)}</div>
+          <div class="ticket-msg">${esc(t.message)}</div>
+          ${t.adminReply ? `<div class="ticket-reply">💬 Admin: ${esc(t.adminReply)}</div>` : ''}
+          <div class="ticket-footer">
+            <span>${formatDate(t.createdAt)}</span>
+            <span class="status-badge status-${t.status}">${t.status === 'open' ? 'অপেক্ষায়' : t.status === 'replied' ? 'Reply এসেছে' : 'বন্ধ'}</span>
+          </div>
+        </div>
+      `).join('');
+    } catch {}
+  }
+
+  document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const subject = document.getElementById('ticketSubject').value;
+    const message = document.getElementById('ticketMsg').value;
+    try {
+      const r = await fetch(`${API}/tickets`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ userId: currentUser._id, userName: currentUser.name, userEmail: currentUser.email, subject, message })
+      });
+      const d = await r.json();
+      const msg = document.getElementById('ticketMsg2');
+      msg.textContent = d.message;
+      msg.className = `msg ${d.success ? 'success' : 'error'}`;
+      if (d.success) {
+        document.getElementById('ticketForm').reset();
+        setTimeout(() => { msg.className='msg'; loadMyTickets(); loadNotifications(); }, 1500);
+      }
+    } catch {}
+  });
+
+  // ===== HELPERS =====
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function formatDate(d) {
+    return new Date(d).toLocaleDateString('bn-BD', { year:'numeric', month:'long', day:'numeric' });
+  }
+  function timeAgo(d) {
+    const diff = (Date.now() - new Date(d)) / 1000;
+    if (diff < 60) return 'এইমাত্র';
+    if (diff < 3600) return `${Math.floor(diff/60)} মিনিট আগে`;
+    if (diff < 86400) return `${Math.floor(diff/3600)} ঘণ্টা আগে`;
+    return `${Math.floor(diff/86400)} দিন আগে`;
+  }
+</script>
+</body>
+</html>

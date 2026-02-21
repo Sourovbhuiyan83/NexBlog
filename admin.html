@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexBlog Admin</title>
+  <style>
+    :root {
+      --bg: #0d0d1a; --bg2: #13132a; --bg3: #1a1a35; --card: #1e1e3a;
+      --border: #2e2e5e; --purple: #7c3aed; --purple2: #6d28d9; --purple3: #8b5cf6;
+      --text: #e2e8f0; --text2: #a0aec0; --text3: #718096;
+      --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px;}
+
+    /* LOGIN */
+    #loginPage { display:flex; justify-content:center; align-items:center; min-height:100vh; background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.15),transparent 70%); }
+    .login-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:32px; width:380px; box-shadow:0 0 40px rgba(124,58,237,.1); }
+    .login-logo { text-align:center; margin-bottom:24px; }
+    .login-logo h1 { font-size:26px; font-weight:800; } .login-logo h1 span{color:var(--purple3);}
+    .login-logo p { color:var(--text3); font-size:12px; margin-top:4px; }
+
+    /* DASHBOARD */
+    #dashPage { display:none; }
+    .sidebar {
+      position:fixed; top:0; left:0; width:220px; height:100vh;
+      background:var(--bg2); border-right:1px solid var(--border);
+      display:flex; flex-direction:column; padding:20px 0; z-index:100;
+    }
+    .sidebar-logo { padding:0 20px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+    .sidebar-logo h2 { font-size:18px; font-weight:800; } .sidebar-logo h2 span{color:var(--purple3);}
+    .sidebar-logo p { color:var(--text3); font-size:11px; margin-top:2px; }
+    .nav-item {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 20px; cursor:pointer; font-size:14px; color:var(--text2);
+      border-left:3px solid transparent; transition:all .2s;
+    }
+    .nav-item:hover, .nav-item.active { background:rgba(124,58,237,.1); color:var(--purple3); border-left-color:var(--purple); }
+    .sidebar-bottom { margin-top:auto; padding:0 12px; }
+    .logout-btn { width:100%; padding:10px; background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.3); color:var(--red); border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; }
+
+    .main-content { margin-left:220px; padding:24px; }
+
+    /* STATS */
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; margin-bottom:24px; }
+    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; }
+    .stat-card .num { font-size:30px; font-weight:800; color:var(--purple3); }
+    .stat-card .lbl { font-size:12px; color:var(--text3); margin-top:4px; }
+
+    /* SECTION */
+    .section { display:none; }
+    .section.active { display:block; }
+    .sec-title { font-size:18px; font-weight:800; margin-bottom:16px; }
+
+    /* TABLE */
+    .tbl-wrap { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    th { background:var(--bg3); color:var(--text2); padding:11px 14px; text-align:left; font-size:13px; font-weight:600; }
+    td { padding:11px 14px; border-bottom:1px solid var(--border); font-size:13px; color:var(--text2); }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(124,58,237,.05); }
+    .no-data { text-align:center; padding:30px; color:var(--text3); }
+
+    /* BADGES */
+    .badge { padding:3px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+    .badge-green { background:rgba(16,185,129,.2); color:var(--green); }
+    .badge-red { background:rgba(239,68,68,.2); color:var(--red); }
+    .badge-yellow { background:rgba(245,158,11,.2); color:var(--yellow); }
+    .badge-purple { background:rgba(124,58,237,.2); color:var(--purple3); }
+    .badge-gray { background:rgba(113,128,150,.2); color:var(--text3); }
+
+    /* ACTION BUTTONS */
+    .act-btn { padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; border:none; margin-right:4px; margin-bottom:2px; }
+    .ab-purple { background:rgba(124,58,237,.2); color:var(--purple3); }
+    .ab-purple:hover { background:rgba(124,58,237,.4); }
+    .ab-green { background:rgba(16,185,129,.2); color:var(--green); }
+    .ab-green:hover { background:rgba(16,185,129,.4); }
+    .ab-red { background:rgba(239,68,68,.2); color:var(--red); }
+    .ab-red:hover { background:rgba(239,68,68,.4); }
+    .ab-yellow { background:rgba(245,158,11,.2); color:var(--yellow); }
+    .ab-yellow:hover { background:rgba(245,158,11,.4); }
+
+    /* MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:500; justify-content:center; align-items:center; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px; width:400px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    .modal h3 { font-size:16px; margin-bottom:16px; }
+    .modal-footer { display:flex; gap:10px; margin-top:16px; }
+    .modal-footer button { flex:1; padding:9px; border:none; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; }
+    .mf-confirm { background:var(--purple); color:white; }
+    .mf-cancel { background:var(--bg3); border:1px solid var(--border); color:var(--text2); }
+
+    /* FORM */
+    .form-group { margin-bottom:14px; }
+    label { display:block; margin-bottom:5px; font-size:13px; color:var(--text2); }
+    input[type="text"],input[type="password"],textarea,select {
+      width:100%; padding:9px 12px; background:var(--bg2); border:1px solid var(--border);
+      border-radius:8px; font-size:13px; color:var(--text); font-family:inherit;
+    }
+    input:focus,textarea:focus,select:focus { outline:none; border-color:var(--purple); }
+    textarea { resize:vertical; }
+    .btn { padding:9px 18px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; border:none; }
+    .btn-purple { background:var(--purple); color:white; }
+    .btn-full { width:100%; margin-top:4px; }
+
+    .msg { padding:9px 13px; border-radius:8px; font-size:13px; margin-top:10px; display:none; }
+    .msg.success { background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3); color:var(--green); display:block; }
+    .msg.error { background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.3); color:var(--red); display:block; }
+    .alert-bar { padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
+    .alert-bar.success { background:rgba(16,185,129,.15); color:var(--green); display:block; }
+    .alert-bar.error { background:rgba(239,68,68,.15); color:var(--red); display:block; }
+
+    /* TICKET DETAIL */
+    .ticket-card { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:12px; }
+    .tc-subject { font-size:14px; font-weight:700; margin-bottom:6px; }
+    .tc-meta { font-size:12px; color:var(--text3); margin-bottom:10px; }
+    .tc-msg { font-size:13px; color:var(--text2); margin-bottom:10px; padding:10px; background:var(--bg2); border-radius:8px; }
+    .tc-reply { font-size:13px; color:var(--purple3); padding:10px; background:rgba(124,58,237,.1); border:1px solid rgba(124,58,237,.3); border-radius:8px; margin-bottom:10px; }
+    .tc-actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+    /* NOTIFY MODAL */
+    #notifyModal .modal { width:420px; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>Nex<span>Blog</span></h1>
+      <p>Admin Control Panel</p>
+    </div>
+    <div class="form-group"><label>Username</label><input type="text" id="aUser" placeholder="admin"></div>
+    <div class="form-group"><label>Password</label><input type="password" id="aPass" placeholder="••••••••"></div>
+    <button class="btn btn-purple btn-full" onclick="adminLogin()">Login</button>
+    <div class="msg" id="loginMsg"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashPage">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <h2>Nex<span>Blog</span></h2>
+      <p>Admin Panel</p>
+    </div>
+    <div class="nav-item active" onclick="showSec('overview')">📊 Overview</div>
+    <div class="nav-item" onclick="showSec('users')">👥 ব্যবহারকারী</div>
+    <div class="nav-item" onclick="showSec('blogs')">📝 Articles</div>
+    <div class="nav-item" onclick="showSec('tickets')">🎫 Support Tickets</div>
+    <div class="nav-item" onclick="showSec('notify')">📣 Notification পাঠান</div>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="adminLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="alert-bar" id="alertBar"></div>
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="overviewSec">
+      <div class="sec-title">📊 Dashboard Overview</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="num" id="s-users">-</div><div class="lbl">মোট ব্যবহারকারী</div></div>
+        <div class="stat-card"><div class="num" id="s-verified">-</div><div class="lbl">Verified Users</div></div>
+        <div class="stat-card"><div class="num" id="s-blogs">-</div><div class="lbl">মোট Articles</div></div>
+        <div class="stat-card"><div class="num" id="s-tickets">-</div><div class="lbl">মোট Tickets</div></div>
+        <div class="stat-card"><div class="num" id="s-open">-</div><div class="lbl">Open Tickets</div></div>
+        <div class="stat-card"><div class="num" id="s-visitors">-</div><div class="lbl">মোট ভিজিটর</div></div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="section" id="usersSec">
+      <div class="sec-title">👥 সকল ব্যবহারকারী</div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>#</th><th>নাম</th><th>Email</th><th>Status</th><th>Signup</th><th>Actions</th></tr></thead>
+        <tbody id="usersTbody"><tr><td colspan="6" class="no-data">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BLOGS -->
+    <div class="section" id="blogsSec">
+      <div class="sec-title">📝 সকল Articles</div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>#</th><th>Title</th><th>লেখক</th><th>তারিখ</th><th>Action</th></tr></thead>
+        <tbody id="blogsTbody"><tr><td colspan="5" class="no-data">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="section" id="ticketsSec">
+      <div class="sec-title">🎫 Support Tickets</div>
+      <div id="ticketsList"></div>
+    </div>
+
+    <!-- NOTIFY -->
+    <div class="section" id="notifySec">
+      <div class="sec-title">📣 User-কে Notification পাঠান</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:500px;">
+        <div class="form-group">
+          <label>ব্যবহারকারী বেছে নিন</label>
+          <select id="notifyUserId"><option value="">-- User বেছে নিন --</option></select>
+        </div>
+        <div class="form-group">
+          <label>Notification Message</label>
+          <textarea id="notifyMsg" rows="4" placeholder="Message লিখুন..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="notifyType">
+            <option value="info">ℹ️ Info</option>
+            <option value="success">✅ Success</option>
+            <option value="warning">⚠️ Warning</option>
+            <option value="danger">🚨 Danger</option>
+          </select>
+        </div>
+        <button class="btn btn-purple" onclick="sendNotify()">📣 পাঠান</button>
+        <div class="msg" id="notifyFormMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESET PASSWORD MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h3>🔑 Password Reset</h3>
+    <p id="resetInfo" style="font-size:13px;color:var(--text3);margin-bottom:14px;"></p>
+    <div class="form-group"><label>নতুন Password</label><input type="password" id="newPass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+    <div class="modal-footer">
+      <button class="mf-confirm" onclick="confirmReset()">Reset করুন</button>
+      <button class="mf-cancel" onclick="closeModal('resetModal')">বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPLY TICKET MODAL -->
+<div class="modal-overlay" id="replyModal">
+  <div class="modal">
+    <h3>💬 Ticket Reply করুন</h3>
+    <p id="replyInfo" style="font-size:13px;color:var(--text3);margin-bottom:14px;"></p>
+    <div class="form-group"><label>Reply</label><textarea id="replyText" rows="5" placeholder="আপনার reply লিখুন..."></textarea></div>
+    <div class="modal-footer">
+      <button class="mf-confirm" onclick="confirmReply()">Reply পাঠান</button>
+      <button class="mf-cancel" onclick="closeModal('replyModal')">বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+  let selUserId = null, selTicketId = null, allUsers = [];
+
+  // ===== AUTH =====
+  async function adminLogin() {
+    const username = document.getElementById('aUser').value;
+    const password = document.getElementById('aPass').value;
+    if (!username || !password) { showMsg('loginMsg','Username ও password দিন','error'); return; }
+    try {
+      const r = await fetch(`${API}/admin/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+      const d = await r.json();
+      if (d.success) {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashPage').style.display = 'block';
+        loadAll();
+      } else showMsg('loginMsg', d.message, 'error');
+    } catch { showMsg('loginMsg','Server error','error'); }
+  }
+
+  function adminLogout() {
+    document.getElementById('loginPage').style.display='flex';
+    document.getElementById('dashPage').style.display='none';
+    document.getElementById('aUser').value=''; document.getElementById('aPass').value='';
+  }
+
+  document.addEventListener('keypress', e => {
+    if (e.key==='Enter' && document.getElementById('loginPage').style.display!=='none') adminLogin();
+  });
+
+  // ===== NAVIGATION =====
+  function showSec(name) {
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.getElementById(name+'Sec').classList.add('active');
+    event.target.classList.add('active');
+    if (name==='users') loadUsers();
+    if (name==='blogs') loadBlogs();
+    if (name==='tickets') loadTickets();
+    if (name==='notify') loadNotifyUsers();
+  }
+
+  // ===== LOAD ALL =====
+  async function loadAll() { await loadStats(); await loadUsers(); await loadBlogs(); await loadTickets(); }
+
+  async function loadStats() {
+    try {
+      const r = await fetch(`${API}/admin/stats`);
+      const d = await r.json();
+      if (d.success) {
+        document.getElementById('s-users').textContent = d.totalUsers;
+        document.getElementById('s-verified').textContent = d.verifiedUsers;
+        document.getElementById('s-blogs').textContent = d.totalBlogs;
+        document.getElementById('s-tickets').textContent = d.totalTickets;
+        document.getElementById('s-open').textContent = d.openTickets;
+        document.getElementById('s-visitors').textContent = d.totalVisitors;
+      }
+    } catch {}
+  }
+
+  async function loadUsers() {
+    try {
+      const r = await fetch(`${API}/admin/users`);
+      const d = await r.json();
+      allUsers = d.users || [];
+      const tbody = document.getElementById('usersTbody');
+      if (!d.success || !d.users.length) { tbody.innerHTML='<tr><td colspan="6" class="no-data">কোনো user নেই</td></tr>'; return; }
+      tbody.innerHTML = d.users.map((u,i) => `
+        <tr>
+          <td>${i+1}</td>
+          <td>${esc(u.name)}</td>
+          <td style="color:var(--text3)">${esc(u.email)}</td>
+          <td>
+            ${u.isVerified ? '<span class="badge badge-green">✅ Verified</span>' : '<span class="badge badge-gray">Unverified</span>'}
+            ${u.isBanned ? ' <span class="badge badge-red">Banned</span>' : ''}
+          </td>
+          <td style="color:var(--text3)">${fDate(u.createdAt)}</td>
+          <td>
+            <button class="act-btn ab-purple" onclick="openReset('${u._id}','${esc(u.name)}')">🔑 Reset</button>
+            ${u.isVerified
+              ? `<button class="act-btn ab-yellow" onclick="toggleVerify('${u._id}',false)">❌ Unverify</button>`
+              : `<button class="act-btn ab-green" onclick="toggleVerify('${u._id}',true)">✅ Verify</button>`}
+            ${u.isBanned
+              ? `<button class="act-btn ab-green" onclick="toggleBan('${u._id}',false)">🔓 Unban</button>`
+              : `<button class="act-btn ab-yellow" onclick="toggleBan('${u._id}',true)">🚫 Ban</button>`}
+            <button class="act-btn ab-red" onclick="deleteUser('${u._id}','${esc(u.name)}')">🗑 Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    } catch {}
+  }
+
+  async function loadBlogs() {
+    try {
+      const r = await fetch(`${API}/admin/blogs`);
+      const d = await r.json();
+      const tbody = document.getElementById('blogsTbody');
+      if (!d.success || !d.blogs.length) { tbody.innerHTML='<tr><td colspan="5" class="no-data">কোনো article নেই</td></tr>'; return; }
+      tbody.innerHTML = d.blogs.map((b,i) => `
+        <tr>
+          <td>${i+1}</td>
+          <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(b.title)}</td>
+          <td>${esc(b.authorName)}</td>
+          <td style="color:var(--text3)">${fDate(b.createdAt)}</td>
+          <td><button class="act-btn ab-red" onclick="deleteBlog('${b._id}')">🗑 Delete</button></td>
+        </tr>
+      `).join('');
+    } catch {}
+  }
+
+  async function loadTickets() {
+    try {
+      const r = await fetch(`${API}/admin/tickets`);
+      const d = await r.json();
+      const container = document.getElementById('ticketsList');
+      if (!d.success || !d.tickets.length) { container.innerHTML='<div style="color:var(--text3);text-align:center;padding:40px">কোনো ticket নেই</div>'; return; }
+      container.innerHTML = d.tickets.map(t => `
+        <div class="ticket-card">
+          <div class="tc-subject">${esc(t.subject)}</div>
+          <div class="tc-meta">👤 ${esc(t.userName)} (${esc(t.userEmail)}) • 📅 ${fDate(t.createdAt)}
+            <span class="badge ${t.status==='open'?'badge-yellow':t.status==='replied'?'badge-purple':'badge-green'}" style="margin-left:8px">
+              ${t.status==='open'?'অপেক্ষায়':t.status==='replied'?'Replied':'বন্ধ'}
+            </span>
+          </div>
+          <div class="tc-msg">${esc(t.message)}</div>
+          ${t.adminReply ? `<div class="tc-reply">💬 Admin Reply: ${esc(t.adminReply)}</div>` : ''}
+          <div class="tc-actions">
+            ${t.status !== 'closed' ? `<button class="act-btn ab-purple" onclick="openReply('${t._id}','${esc(t.userName)}')">💬 Reply</button>` : ''}
+            ${t.status !== 'closed' ? `<button class="act-btn ab-green" onclick="closeTicket('${t._id}')">✅ বন্ধ করুন</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    } catch {}
+  }
+
+  function loadNotifyUsers() {
+    const sel = document.getElementById('notifyUserId');
+    sel.innerHTML = '<option value="">-- User বেছে নিন --</option>';
+    allUsers.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u._id; opt.textContent = `${u.name} (${u.email})`;
+      sel.appendChild(opt);
+    });
+  }
+
+  // ===== USER ACTIONS =====
+  function openReset(userId, name) {
+    selUserId = userId;
+    document.getElementById('resetInfo').textContent = `ব্যবহারকারী: ${name}`;
+    document.getElementById('newPass').value = '';
+    document.getElementById('resetModal').classList.add('show');
+  }
+
+  async function confirmReset() {
+    const pwd = document.getElementById('newPass').value;
+    if (!pwd || pwd.length < 6) { alert('Password কমপক্ষে ৬ অক্ষর হতে হবে'); return; }
+    try {
+      const r = await fetch(`${API}/admin/reset-password`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:selUserId,newPassword:pwd})});
+      const d = await r.json();
+      closeModal('resetModal');
+      showAlert(d.message, d.success ? 'success' : 'error');
+    } catch { closeModal('resetModal'); }
+  }
+
+  async function toggleVerify(userId, verify) {
+    if (!confirm(verify ? 'এই user কে verify করবেন?' : 'Verification সরাবেন?')) return;
+    try {
+      const r = await fetch(`${API}/admin/verify-user/${userId}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({verified:verify})});
+      const d = await r.json();
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) { loadUsers(); loadStats(); }
+    } catch {}
+  }
+
+  async function toggleBan(userId, ban) {
+    if (!confirm(ban ? 'এই user কে ban করবেন?' : 'Unban করবেন?')) return;
+    try {
+      const r = await fetch(`${API}/admin/ban-user/${userId}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ban})});
+      const d = await r.json();
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) loadUsers();
+    } catch {}
+  }
+
+  async function deleteUser(userId, name) {
+    if (!confirm(`"${name}" কে সম্পূর্ণ delete করবেন? তার সব data মুছে যাবে।`)) return;
+    try {
+      const r = await fetch(`${API}/admin/users/${userId}`,{method:'DELETE'});
+      const d = await r.json();
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) { loadUsers(); loadBlogs(); loadStats(); }
+    } catch {}
+  }
+
+  async function deleteBlog(id) {
+    if (!confirm('Article delete করবেন?')) return;
+    try {
+      const r = await fetch(`${API}/admin/blogs/${id}`,{method:'DELETE'});
+      const d = await r.json();
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) { loadBlogs(); loadStats(); }
+    } catch {}
+  }
+
+  // ===== TICKET ACTIONS =====
+  function openReply(ticketId, userName) {
+    selTicketId = ticketId;
+    document.getElementById('replyInfo').textContent = `Ticket: ${userName}`;
+    document.getElementById('replyText').value = '';
+    document.getElementById('replyModal').classList.add('show');
+  }
+
+  async function confirmReply() {
+    const reply = document.getElementById('replyText').value;
+    if (!reply.trim()) { alert('Reply লিখুন'); return; }
+    try {
+      const r = await fetch(`${API}/admin/tickets/${selTicketId}/reply`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reply})});
+      const d = await r.json();
+      closeModal('replyModal');
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) { loadTickets(); loadStats(); }
+    } catch { closeModal('replyModal'); }
+  }
+
+  async function closeTicket(ticketId) {
+    if (!confirm('Ticket বন্ধ করবেন?')) return;
+    try {
+      const r = await fetch(`${API}/admin/tickets/${ticketId}/close`,{method:'POST'});
+      const d = await r.json();
+      showAlert(d.message, d.success ? 'success' : 'error');
+      if (d.success) { loadTickets(); loadStats(); }
+    } catch {}
+  }
+
+  // ===== SEND NOTIFICATION =====
+  async function sendNotify() {
+    const userId = document.getElementById('notifyUserId').value;
+    const message = document.getElementById('notifyMsg').value;
+    const type = document.getElementById('notifyType').value;
+    if (!userId) { showMsg('notifyFormMsg','User বেছে নিন','error'); return; }
+    if (!message.trim()) { showMsg('notifyFormMsg','Message লিখুন','error'); return; }
+    try {
+      const r = await fetch(`${API}/admin/notify`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,message,type})});
+      const d = await r.json();
+      showMsg('notifyFormMsg', d.message, d.success ? 'success' : 'error');
+      if (d.success) { document.getElementById('notifyMsg').value=''; document.getElementById('notifyUserId').value=''; }
+    } catch {}
+  }
+
+  // ===== HELPERS =====
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  function showAlert(text, type) {
+    const el = document.getElementById('alertBar');
+    el.textContent = text; el.className = `alert-bar ${type}`;
+    setTimeout(() => { el.className='alert-bar'; }, 3500);
+  }
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text; el.className = `msg ${type}`;
+  }
+  function fDate(d) { return new Date(d).toLocaleDateString('bn-BD',{year:'numeric',month:'short',day:'numeric'}); }
+  function esc(s) { return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+</script>
+</body>
+</html>
