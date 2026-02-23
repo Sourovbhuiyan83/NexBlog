@@ -10,9 +10,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/premium_blog';
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB error:', err));
 
 // ===================== MODELS =====================
 
@@ -41,7 +38,7 @@ const Blog = mongoose.model('Blog', blogSchema);
 const notificationSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   message: { type: String, required: true },
-  type: { type: String, default: 'info' }, // info, warning, success, danger
+  type: { type: String, default: 'info' },
   isRead: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
@@ -53,7 +50,7 @@ const ticketSchema = new mongoose.Schema({
   userEmail: { type: String, required: true },
   subject: { type: String, required: true },
   message: { type: String, required: true },
-  status: { type: String, default: 'open' }, // open, replied, closed
+  status: { type: String, default: 'open' },
   adminReply: { type: String, default: '' },
   repliedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
@@ -62,10 +59,22 @@ const Ticket = mongoose.model('Ticket', ticketSchema);
 
 // ===================== INIT =====================
 async function init() {
-  const v = await Visitor.findOne();
-  if (!v) await new Visitor({ count: 0 }).save();
+  try {
+    const v = await Visitor.findOne();
+    if (!v) await new Visitor({ count: 0 }).save();
+    console.log('Init complete');
+  } catch (err) {
+    console.error('Init error:', err);
+  }
 }
-init();
+
+// ===================== MongoDB Connect =====================
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    init();
+  })
+  .catch(err => console.error('MongoDB error:', err));
 
 // ===================== HELPER =====================
 async function sendNotification(userId, message, type = 'info') {
@@ -221,7 +230,6 @@ app.get('/api/admin/users', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Reset password
 app.post('/api/admin/reset-password', async (req, res) => {
   try {
     const { userId, newPassword } = req.body;
@@ -235,7 +243,6 @@ app.post('/api/admin/reset-password', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Delete user
 app.delete('/api/admin/users/:userId', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.userId);
@@ -247,7 +254,6 @@ app.delete('/api/admin/users/:userId', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Verify user
 app.post('/api/admin/verify-user/:userId', async (req, res) => {
   try {
     const { verified } = req.body;
@@ -262,7 +268,6 @@ app.post('/api/admin/verify-user/:userId', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Ban/Unban user
 app.post('/api/admin/ban-user/:userId', async (req, res) => {
   try {
     const { ban } = req.body;
@@ -277,7 +282,6 @@ app.post('/api/admin/ban-user/:userId', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Delete blog
 app.delete('/api/admin/blogs/:id', async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
@@ -295,7 +299,6 @@ app.get('/api/admin/blogs', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Get all tickets
 app.get('/api/admin/tickets', async (req, res) => {
   try {
     const tickets = await Ticket.find().sort({ createdAt: -1 });
@@ -303,7 +306,6 @@ app.get('/api/admin/tickets', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Reply to ticket
 app.post('/api/admin/tickets/:id/reply', async (req, res) => {
   try {
     const { reply } = req.body;
@@ -318,7 +320,6 @@ app.post('/api/admin/tickets/:id/reply', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Close ticket
 app.post('/api/admin/tickets/:id/close', async (req, res) => {
   try {
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, { status: 'closed' }, { new: true });
@@ -329,7 +330,6 @@ app.post('/api/admin/tickets/:id/close', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
-// Admin: Send notification to user
 app.post('/api/admin/notify', async (req, res) => {
   try {
     const { userId, message, type } = req.body;
@@ -343,5 +343,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server চালু আছে: http://localhost:${PORT}`);
   console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
-  console.log(`Admin: username=admin, password=admin123`);
 });
