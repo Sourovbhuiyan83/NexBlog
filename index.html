@@ -291,7 +291,7 @@
             <div class="detail-author">
               <div class="detail-author-img" id="detailAuthorImg"></div>
               <span id="detailAuthor"></span>
-              <span id="detailVerifiedBadge" style="display:none" class="verified-icon">✔️</span>
+              <span id="detailVerifiedBadge" style="display:none" class="verified-icon"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>
             </div>
             <span>•</span>
             <span id="detailDate"></span>
@@ -317,7 +317,7 @@
           <div class="profile-info">
             <h2 id="profileName">
               <span id="profileNameText"></span>
-              <span id="profileVerifiedBadge" style="display:none" class="verified-badge-lg">✔️</span>
+              <span id="profileVerifiedBadge" style="display:none" class="verified-badge-lg"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>
             </h2>
             <p id="profileEmail"></p>
             <p id="profileJoined" style="margin-top:4px; font-size:12px;"></p>
@@ -355,7 +355,7 @@
       </div>
       <div class="help-card" id="verifySection">
         <h3>✅ ID Verification</h3>
-        <p style="font-size:13px; color:var(--text2); margin-bottom:14px;">Account verify করলে আপনার নামের পাশে <span style="color:#3b82f6">✔️</span> badge দেখাবে।</p>
+        <p style="font-size:13px; color:var(--text2); margin-bottom:14px;">Account verify করলে আপনার নামের পাশে <span style="color:#3b82f6"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span> badge দেখাবে।</p>
         <div id="verifyStatus"></div>
       </div>
       <div class="help-card">
@@ -447,7 +447,7 @@
       const initials = currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
       avatar.textContent = initials;
     }
-    document.getElementById('navName').textContent = currentUser.name + (currentUser.isVerified ? ' ✔️' : '');
+    document.getElementById('navName').textContent = currentUser.name + (currentUser.isVerified ? ' <img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;">' : '');
   }
 
   function logout() {
@@ -601,7 +601,7 @@
               <div class="blog-author">
                 ${authorAvatar}
                 <span>${esc(b.authorName)}</span>
-                ${b.authorVerified ? '<span class="verified-icon">✔️</span>' : ''}
+                ${b.authorVerified ? '<span class="verified-icon"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>' : ''}
                 <span style="color:var(--border)">•</span>
                 <span>${formatDate(b.createdAt)}</span>
               </div>
@@ -724,7 +724,7 @@
     loadMyTickets();
     const verifyEl = document.getElementById('verifyStatus');
     if (currentUser.isVerified) {
-      verifyEl.innerHTML = '<div class="verified-tag">✔️ আপনার account verified আছে</div>';
+      verifyEl.innerHTML = '<div class="verified-tag"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"> আপনার account verified আছে</div>';
     } else {
       verifyEl.innerHTML = `
         <button class="verify-request-btn" onclick="requestVerification()">🔷 Verification Request পাঠান</button>
