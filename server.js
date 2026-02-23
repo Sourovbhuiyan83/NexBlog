@@ -3,22 +3,33 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname)));
+
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/premium_blog';
 
 // ===================== MODELS =====================
-
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   isBanned: { type: Boolean, default: false },
+  profileImage: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now }
 });
 const User = mongoose.model('User', userSchema);
@@ -29,8 +40,11 @@ const Visitor = mongoose.model('Visitor', visitorSchema);
 const blogSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
+  image: { type: String, default: '' },
   authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   authorName: { type: String, required: true },
+  authorImage: { type: String, default: '' },
+  authorVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 const Blog = mongoose.model('Blog', blogSchema);
@@ -68,18 +82,57 @@ async function init() {
   }
 }
 
-// ===================== MongoDB Connect =====================
 mongoose.connect(MONGO_URI)
-  .then(() => {
-    console.log('MongoDB connected successfully');
-    init();
-  })
+  .then(() => { console.log('MongoDB connected successfully'); init(); })
   .catch(err => console.error('MongoDB error:', err));
 
 // ===================== HELPER =====================
 async function sendNotification(userId, message, type = 'info') {
   await new Notification({ userId, message, type }).save();
 }
+
+// ===================== IMAGE UPLOAD =====================
+app.post('/api/upload/profile', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ success: false, message: 'Image দিন' });
+    const b64 = req.file.buffer.toString('base64');
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+    const result = await cloudinary.uploader.upload(dataURI, { folder: 'nexblog/profiles', transformation: [{ width: 200, height: 200, crop: 'fill' }] });
+    const user = await User.findByIdAndUpdate(req.body.userId, { profileImage: result.secure_url }, { new: true });
+    if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
+    res.json({ success: true, imageUrl: result.secure_url });
+  } catch (e) { console.error(e); res.status(500).json({ success: false, message: 'Upload failed' }); }
+});
+
+app.post('/api/upload/article', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ success: false, message: 'Image দিন' });
+    const b64 = req.file.buffer.toString('base64');
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+    const result = await cloudinary.uploader.upload(dataURI, { folder: 'nexblog/articles', transformation: [{ width: 800, height: 400, crop: 'fill' }] });
+    res.json({ success: true, imageUrl: result.secure_url });
+  } catch (e) { console.error(e); res.status(500).json({ success: false, message: 'Upload failed' }); }
+});
+
+// ===================== PROFILE UPDATE =====================
+app.put('/api/user/update-name', async (req, res) => {
+  try {
+    const { userId, name } = req.body;
+    if (!name || name.trim().length < 2) return res.status(400).json({ success: false, message: 'নাম কমপক্ষে ২ অক্ষর হতে হবে' });
+    const user = await User.findByIdAndUpdate(userId, { name: name.trim() }, { new: true });
+    if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
+    await Blog.updateMany({ authorId: userId }, { authorName: name.trim() });
+    res.json({ success: true, message: 'নাম update হয়েছে', user: { _id: user._id, name: user.name, email: user.email, isVerified: user.isVerified, profileImage: user.profileImage } });
+  } catch { res.status(500).json({ success: false, message: 'Server error' }); }
+});
+
+app.get('/api/user/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id, 'name email isVerified profileImage createdAt');
+    if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
+    res.json({ success: true, user });
+  } catch { res.status(500).json({ success: false }); }
+});
 
 // ===================== VISITOR =====================
 app.post('/api/visitor/increment', async (req, res) => {
@@ -89,48 +142,42 @@ app.post('/api/visitor/increment', async (req, res) => {
   } catch { res.status(500).json({ success: false }); }
 });
 
+app.get('/api/visitor/count', async (req, res) => {
+  try {
+    const v = await Visitor.findOne();
+    res.json({ success: true, count: v?.count || 0 });
+  } catch { res.status(500).json({ success: false }); }
+});
+
 // ===================== AUTH =====================
 app.post('/api/signup', async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    if (!name || !email || !password)
-      return res.status(400).json({ success: false, message: 'সব field পূরণ করুন' });
-    if (password.length < 6)
-      return res.status(400).json({ success: false, message: 'Password কমপক্ষে ৬ অক্ষর হতে হবে' });
-    if (await User.findOne({ email }))
-      return res.status(400).json({ success: false, message: 'এই email দিয়ে আগেই account আছে' });
-
+    if (!name || !email || !password) return res.status(400).json({ success: false, message: 'সব field পূরণ করুন' });
+    if (password.length < 6) return res.status(400).json({ success: false, message: 'Password কমপক্ষে ৬ অক্ষর হতে হবে' });
+    if (await User.findOne({ email })) return res.status(400).json({ success: false, message: 'এই email দিয়ে আগেই account আছে' });
     const hashed = await bcrypt.hash(password, 10);
     const user = await new User({ name, email, password: hashed }).save();
     await sendNotification(user._id, `স্বাগতম ${name}! আপনার account সফলভাবে তৈরি হয়েছে।`, 'success');
     res.json({ success: true, message: 'Account তৈরি হয়েছে! এখন login করুন।' });
-  } catch (e) {
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
+  } catch (e) { res.status(500).json({ success: false, message: 'Server error' }); }
 });
 
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password)
-      return res.status(400).json({ success: false, message: 'Email ও password দিন' });
+    if (!email || !password) return res.status(400).json({ success: false, message: 'Email ও password দিন' });
     const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password)))
-      return res.status(400).json({ success: false, message: 'Email বা password সঠিক নয়' });
-    if (user.isBanned)
-      return res.status(403).json({ success: false, message: 'আপনার account suspend করা হয়েছে। Help Center-এ যোগাযোগ করুন।' });
-
-    res.json({
-      success: true,
-      user: { _id: user._id, name: user.name, email: user.email, isVerified: user.isVerified }
-    });
+    if (!user || !(await bcrypt.compare(password, user.password))) return res.status(400).json({ success: false, message: 'Email বা password সঠিক নয়' });
+    if (user.isBanned) return res.status(403).json({ success: false, message: 'আপনার account suspend করা হয়েছে।' });
+    res.json({ success: true, user: { _id: user._id, name: user.name, email: user.email, isVerified: user.isVerified, profileImage: user.profileImage || '' } });
   } catch { res.status(500).json({ success: false, message: 'Server error' }); }
 });
 
 // ===================== NOTIFICATIONS =====================
 app.get('/api/notifications/:userId', async (req, res) => {
   try {
-    const notifications = await Notification.find({ userId: req.params.userId }).sort({ createdAt: -1 }).limit(20);
+    const notifications = await Notification.find({ userId: req.params.userId }).sort({ createdAt: -1 }).limit(30);
     const unreadCount = await Notification.countDocuments({ userId: req.params.userId, isRead: false });
     res.json({ success: true, notifications, unreadCount });
   } catch { res.status(500).json({ success: false }); }
@@ -161,9 +208,9 @@ app.get('/api/blogs/:id', async (req, res) => {
 
 app.post('/api/blogs', async (req, res) => {
   try {
-    const { title, content, authorId, authorName } = req.body;
+    const { title, content, image, authorId, authorName, authorImage, authorVerified } = req.body;
     if (!title || !content) return res.status(400).json({ success: false, message: 'Title ও content দিন' });
-    const blog = await new Blog({ title, content, authorId, authorName }).save();
+    const blog = await new Blog({ title, content, image: image || '', authorId, authorName, authorImage: authorImage || '', authorVerified: authorVerified || false }).save();
     await sendNotification(authorId, `আপনার article "${title}" সফলভাবে প্রকাশিত হয়েছে।`, 'success');
     res.json({ success: true, message: 'Article প্রকাশিত হয়েছে!', blog });
   } catch { res.status(500).json({ success: false, message: 'Server error' }); }
@@ -174,10 +221,16 @@ app.delete('/api/blogs/:id', async (req, res) => {
     const { userId } = req.body;
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ success: false, message: 'Article পাওয়া যায়নি' });
-    if (blog.authorId.toString() !== userId)
-      return res.status(403).json({ success: false, message: 'আপনি এই article delete করতে পারবেন না' });
+    if (blog.authorId.toString() !== userId) return res.status(403).json({ success: false, message: 'আপনি এই article delete করতে পারবেন না' });
     await Blog.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Article delete হয়েছে' });
+  } catch { res.status(500).json({ success: false }); }
+});
+
+app.get('/api/blogs/user/:userId', async (req, res) => {
+  try {
+    const blogs = await Blog.find({ authorId: req.params.userId }).sort({ createdAt: -1 });
+    res.json({ success: true, blogs });
   } catch { res.status(500).json({ success: false }); }
 });
 
@@ -187,8 +240,8 @@ app.post('/api/tickets', async (req, res) => {
     const { userId, userName, userEmail, subject, message } = req.body;
     if (!subject || !message) return res.status(400).json({ success: false, message: 'Subject ও message দিন' });
     const ticket = await new Ticket({ userId, userName, userEmail, subject, message }).save();
-    await sendNotification(userId, `আপনার support ticket "#${ticket._id.toString().slice(-6)}" সফলভাবে জমা হয়েছে। শীঘ্রই reply করা হবে।`, 'info');
-    res.json({ success: true, message: 'Ticket জমা হয়েছে! শীঘ্রই reply আসবে।' });
+    await sendNotification(userId, `আপনার support ticket সফলভাবে জমা হয়েছে।`, 'info');
+    res.json({ success: true, message: 'Ticket জমা হয়েছে!' });
   } catch { res.status(500).json({ success: false, message: 'Server error' }); }
 });
 
@@ -205,10 +258,8 @@ const ADMIN_PASSWORD = '1727451230S@#';
 
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD)
-    res.json({ success: true });
-  else
-    res.status(401).json({ success: false, message: 'Username বা password ভুল' });
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) res.json({ success: true });
+  else res.status(401).json({ success: false, message: 'Username বা password ভুল' });
 });
 
 app.get('/api/admin/stats', async (req, res) => {
@@ -225,7 +276,7 @@ app.get('/api/admin/stats', async (req, res) => {
 
 app.get('/api/admin/users', async (req, res) => {
   try {
-    const users = await User.find({}, 'name email isVerified isBanned createdAt');
+    const users = await User.find({}, 'name email isVerified isBanned profileImage createdAt');
     res.json({ success: true, users });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -233,12 +284,11 @@ app.get('/api/admin/users', async (req, res) => {
 app.post('/api/admin/reset-password', async (req, res) => {
   try {
     const { userId, newPassword } = req.body;
-    if (!newPassword || newPassword.length < 6)
-      return res.status(400).json({ success: false, message: 'Password কমপক্ষে ৬ অক্ষর হতে হবে' });
+    if (!newPassword || newPassword.length < 6) return res.status(400).json({ success: false, message: 'Password কমপক্ষে ৬ অক্ষর' });
     const hashed = await bcrypt.hash(newPassword, 10);
     const user = await User.findByIdAndUpdate(userId, { password: hashed });
     if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
-    await sendNotification(userId, 'আপনার account-এর password admin কর্তৃক reset করা হয়েছে।', 'warning');
+    await sendNotification(userId, 'আপনার password admin কর্তৃক reset করা হয়েছে।', 'warning');
     res.json({ success: true, message: 'Password reset হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -250,20 +300,18 @@ app.delete('/api/admin/users/:userId', async (req, res) => {
     await Blog.deleteMany({ authorId: req.params.userId });
     await Notification.deleteMany({ userId: req.params.userId });
     await Ticket.deleteMany({ userId: req.params.userId });
-    res.json({ success: true, message: 'User ও তার সব data delete হয়েছে' });
+    res.json({ success: true, message: 'User delete হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
 
 app.post('/api/admin/verify-user/:userId', async (req, res) => {
   try {
     const { verified } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.userId, { isVerified: verified });
+    const user = await User.findByIdAndUpdate(req.params.userId, { isVerified: verified }, { new: true });
     if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
-    if (verified) {
-      await sendNotification(req.params.userId, '🎉 অভিনন্দন! আপনার account সফলভাবে verified হয়েছে।', 'success');
-    } else {
-      await sendNotification(req.params.userId, 'আপনার account verification সরিয়ে নেওয়া হয়েছে।', 'warning');
-    }
+    await Blog.updateMany({ authorId: req.params.userId }, { authorVerified: verified });
+    if (verified) await sendNotification(req.params.userId, '🎉 অভিনন্দন! আপনার account verified হয়েছে।', 'success');
+    else await sendNotification(req.params.userId, 'আপনার verification সরিয়ে নেওয়া হয়েছে।', 'warning');
     res.json({ success: true, message: verified ? 'User verified হয়েছে' : 'Verification সরানো হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -273,11 +321,8 @@ app.post('/api/admin/ban-user/:userId', async (req, res) => {
     const { ban } = req.body;
     const user = await User.findByIdAndUpdate(req.params.userId, { isBanned: ban });
     if (!user) return res.status(404).json({ success: false, message: 'User পাওয়া যায়নি' });
-    if (ban) {
-      await sendNotification(req.params.userId, '⚠️ আপনার account suspend করা হয়েছে। বিস্তারিত জানতে Help Center-এ যোগাযোগ করুন।', 'danger');
-    } else {
-      await sendNotification(req.params.userId, '✅ আপনার account-এর suspension তুলে নেওয়া হয়েছে।', 'success');
-    }
+    if (ban) await sendNotification(req.params.userId, '⚠️ আপনার account suspend করা হয়েছে।', 'danger');
+    else await sendNotification(req.params.userId, '✅ আপনার account suspension তুলে নেওয়া হয়েছে।', 'success');
     res.json({ success: true, message: ban ? 'User ban হয়েছে' : 'User unban হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -285,9 +330,7 @@ app.post('/api/admin/ban-user/:userId', async (req, res) => {
 app.delete('/api/admin/blogs/:id', async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
-    if (blog) {
-      await sendNotification(blog.authorId, `⚠️ আপনার article "${blog.title}" admin কর্তৃক remove করা হয়েছে।`, 'warning');
-    }
+    if (blog) await sendNotification(blog.authorId, `⚠️ আপনার article "${blog.title}" admin কর্তৃক remove করা হয়েছে।`, 'warning');
     res.json({ success: true, message: 'Article delete হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -309,13 +352,9 @@ app.get('/api/admin/tickets', async (req, res) => {
 app.post('/api/admin/tickets/:id/reply', async (req, res) => {
   try {
     const { reply } = req.body;
-    const ticket = await Ticket.findByIdAndUpdate(
-      req.params.id,
-      { adminReply: reply, status: 'replied', repliedAt: new Date() },
-      { new: true }
-    );
+    const ticket = await Ticket.findByIdAndUpdate(req.params.id, { adminReply: reply, status: 'replied', repliedAt: new Date() }, { new: true });
     if (!ticket) return res.status(404).json({ success: false, message: 'Ticket পাওয়া যায়নি' });
-    await sendNotification(ticket.userId, `📩 আপনার support ticket "#${ticket._id.toString().slice(-6)}" এ admin reply করেছে।`, 'info');
+    await sendNotification(ticket.userId, `📩 আপনার support ticket-এ admin reply করেছে।`, 'info');
     res.json({ success: true, message: 'Reply পাঠানো হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -323,9 +362,7 @@ app.post('/api/admin/tickets/:id/reply', async (req, res) => {
 app.post('/api/admin/tickets/:id/close', async (req, res) => {
   try {
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, { status: 'closed' }, { new: true });
-    if (ticket) {
-      await sendNotification(ticket.userId, `✅ আপনার support ticket "#${ticket._id.toString().slice(-6)}" বন্ধ করা হয়েছে।`, 'info');
-    }
+    if (ticket) await sendNotification(ticket.userId, `✅ আপনার support ticket বন্ধ করা হয়েছে।`, 'info');
     res.json({ success: true, message: 'Ticket বন্ধ হয়েছে' });
   } catch { res.status(500).json({ success: false }); }
 });
@@ -342,5 +379,4 @@ app.post('/api/admin/notify', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server চালু আছে: http://localhost:${PORT}`);
-  console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
 });
