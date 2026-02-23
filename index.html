@@ -396,13 +396,6 @@
   let currentBlogId = null;
   let currentBlogAuthorId = null;
 
-  window.addEventListener('load', async () => {
-    try {
-      const r = await fetch(`${API}/api/visitor/increment`, { method: 'POST' });
-      const d = await r.json();
-      document.getElementById('visitorInfo').textContent = `👁️ মোট ভিজিটর: ${d.count}`;
-    } catch {}
-  });
 
   function showTab(tab) {
     document.getElementById('loginTab').classList.toggle('active', tab==='login');
