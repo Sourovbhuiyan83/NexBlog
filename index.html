@@ -6,178 +6,183 @@
   <title>NexBlog — Premium</title>
   <style>
     :root {
-      --bg: #0d0d1a; --bg2: #13132a; --bg3: #1a1a35; --card: #1e1e3a; --card2: #252548;
-      --border: #2e2e5e; --purple: #7c3aed; --purple2: #6d28d9; --purple3: #8b5cf6;
-      --purple-glow: rgba(124,58,237,0.3); --text: #e2e8f0; --text2: #a0aec0; --text3: #718096;
-      --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+      --bg:#0d0d1a;--bg2:#13132a;--bg3:#1a1a35;--card:#1e1e3a;--card2:#252548;
+      --border:#2e2e5e;--purple:#7c3aed;--purple2:#6d28d9;--purple3:#8b5cf6;
+      --text:#e2e8f0;--text2:#a0aec0;--text3:#718096;
+      --green:#10b981;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg2); } ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px;}
 
-    /* AUTH */
-    #authPage { display:flex; justify-content:center; align-items:center; min-height:100vh; background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%); }
-    .auth-wrap { width:100%; max-width:420px; padding:20px; }
-    .auth-logo { text-align:center; margin-bottom:30px; }
-    .auth-logo h1 { font-size:30px; font-weight:800; letter-spacing:-1px; }
-    .auth-logo h1 span { color:var(--purple3); }
-    .auth-logo p { color:var(--text3); font-size:13px; margin-top:5px; }
-    .auth-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:30px; box-shadow:0 0 40px rgba(124,58,237,0.1); }
-    .tabs { display:flex; background:var(--bg2); border-radius:8px; padding:4px; margin-bottom:24px; }
-    .tab { flex:1; padding:9px; text-align:center; cursor:pointer; background:none; border:none; font-size:14px; color:var(--text3); border-radius:6px; transition:all 0.2s; }
-    .tab.active { background:var(--purple); color:white; font-weight:600; }
+    #authPage{display:flex;justify-content:center;align-items:center;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.15),transparent 70%);}
+    .auth-wrap{width:100%;max-width:420px;padding:20px;}
+    .auth-logo{text-align:center;margin-bottom:30px;}
+    .auth-logo h1{font-size:30px;font-weight:800;letter-spacing:-1px;}
+    .auth-logo h1 span{color:var(--purple3);}
+    .auth-logo p{color:var(--text3);font-size:13px;margin-top:5px;}
+    .auth-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;box-shadow:0 0 40px rgba(124,58,237,0.1);}
+    .tabs{display:flex;background:var(--bg2);border-radius:8px;padding:4px;margin-bottom:24px;}
+    .tab{flex:1;padding:9px;text-align:center;cursor:pointer;background:none;border:none;font-size:14px;color:var(--text3);border-radius:6px;transition:all 0.2s;}
+    .tab.active{background:var(--purple);color:white;font-weight:600;}
 
-    /* MAIN */
-    #mainPage { display:none; }
-    .navbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:60px; position:sticky; top:0; z-index:200; }
-    .nav-logo { font-size:18px; font-weight:800; letter-spacing:-0.5px; cursor:pointer; }
-    .nav-logo span { color:var(--purple3); }
-    .nav-right { display:flex; align-items:center; gap:10px; }
-    .nav-user { display:flex; align-items:center; gap:8px; cursor:pointer; }
-    .nav-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--purple3)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:white; overflow:hidden; border:2px solid var(--border); }
-    .nav-avatar img { width:100%; height:100%; object-fit:cover; }
-    .nav-name { font-size:13px; color:var(--text2); }
+    #mainPage{display:none;}
+    .navbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200;}
+    .nav-logo{font-size:18px;font-weight:800;cursor:pointer;}
+    .nav-logo span{color:var(--purple3);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .nav-user{display:flex;align-items:center;gap:8px;cursor:pointer;}
+    .nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple3));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;overflow:hidden;border:2px solid var(--border);}
+    .nav-avatar img{width:100%;height:100%;object-fit:cover;}
+    .nav-name{font-size:13px;color:var(--text2);}
 
-    /* NOTIF */
-    .notif-btn { position:relative; background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:7px 10px; border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s; }
-    .notif-btn:hover { border-color:var(--purple); color:var(--purple3); }
-    .notif-count { position:absolute; top:-5px; right:-5px; background:var(--red); color:white; font-size:10px; width:18px; height:18px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:700; }
-    .notif-panel { position:fixed; top:65px; right:15px; width:340px; max-height:480px; overflow-y:auto; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.5); z-index:300; display:none; }
-    .notif-panel.show { display:block; }
-    .notif-header { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-    .notif-header span { font-size:14px; font-weight:600; }
-    .notif-clear { font-size:12px; color:var(--purple3); cursor:pointer; background:none; border:none; }
-    .notif-item { padding:13px 16px; border-bottom:1px solid var(--border); font-size:13px; line-height:1.6; }
-    .notif-item:last-child { border-bottom:none; }
-    .notif-item.unread { background:rgba(124,58,237,0.08); border-left:3px solid var(--purple); }
-    .notif-item .notif-msg { margin-bottom:4px; }
-    .notif-item .notif-time { font-size:11px; color:var(--text3); }
-    .notif-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:8px; flex-shrink:0; }
-    .dot-success { background:var(--green); } .dot-warning { background:var(--yellow); } .dot-danger { background:var(--red); } .dot-info { background:var(--blue); }
-    .no-notif { padding:40px; text-align:center; color:var(--text3); font-size:13px; }
+    .notif-btn{position:relative;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 10px;border-radius:8px;cursor:pointer;font-size:16px;}
+    .notif-count{position:absolute;top:-5px;right:-5px;background:var(--red);color:white;font-size:10px;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;font-weight:700;}
+    .notif-panel{position:fixed;top:65px;right:15px;width:340px;max-height:480px;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.5);z-index:300;display:none;}
+    .notif-panel.show{display:block;}
+    .notif-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+    .notif-header span{font-size:14px;font-weight:600;}
+    .notif-clear{font-size:12px;color:var(--purple3);cursor:pointer;background:none;border:none;}
+    .notif-item{padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;line-height:1.6;}
+    .notif-item.unread{background:rgba(124,58,237,0.08);border-left:3px solid var(--purple);}
+    .notif-item .notif-time{font-size:11px;color:var(--text3);margin-top:3px;}
+    .notif-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;}
+    .dot-success{background:var(--green);}.dot-warning{background:var(--yellow);}.dot-danger{background:var(--red);}.dot-info{background:var(--blue);}
+    .no-notif{padding:40px;text-align:center;color:var(--text3);font-size:13px;}
 
-    /* NAV BTNS */
-    .nbtn { padding:7px 14px; border-radius:8px; cursor:pointer; font-size:13px; border:none; font-weight:600; transition:all 0.2s; }
-    .nbtn-write { background:var(--purple); color:white; }
-    .nbtn-write:hover { background:var(--purple2); }
-    .nbtn-help { background:var(--bg3); border:1px solid var(--border); color:var(--text2); }
-    .nbtn-help:hover { border-color:var(--purple); color:var(--purple3); }
-    .nbtn-logout { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:var(--red); }
-    .nbtn-logout:hover { background:rgba(239,68,68,0.25); }
+    .nbtn{padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;border:none;font-weight:600;transition:all 0.2s;}
+    .nbtn-write{background:var(--purple);color:white;}
+    .nbtn-help{background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+    .nbtn-logout{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--red);}
 
-    /* LAYOUT */
-    .page-wrap { max-width:860px; margin:0 auto; padding:28px 16px; }
-    .view { display:none; } .view.active { display:block; }
+    .page-wrap{max-width:860px;margin:0 auto;padding:28px 16px;}
+    .view{display:none;}.view.active{display:block;}
 
-    /* WRITE FORM */
-    .write-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; margin-bottom:24px; }
-    .write-card h3 { font-size:17px; margin-bottom:18px; color:var(--text); }
+    .write-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;}
 
-    /* BLOG CARDS */
-    .blog-grid { display:flex; flex-direction:column; gap:14px; }
-    .blog-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:all 0.25s; position:relative; }
-    .blog-card:hover { border-color:var(--purple); transform:translateY(-1px); box-shadow:0 8px 30px rgba(124,58,237,0.15); }
-    .blog-card-img { width:100%; height:180px; object-fit:cover; display:block; }
-    .blog-card-body { padding:18px 20px; }
-    .blog-card-title { font-size:17px; font-weight:700; color:var(--text); margin-bottom:8px; }
-    .blog-card-preview { font-size:14px; color:var(--text2); line-height:1.6; margin-bottom:12px; }
-    .blog-meta { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text3); }
-    .blog-author { display:flex; align-items:center; gap:6px; }
-    .author-avatar { width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--purple3)); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white; overflow:hidden; }
-    .author-avatar img { width:100%; height:100%; object-fit:cover; }
-    .verified-icon { color:#3b82f6; font-size:12px; }
-    .btn-del-sm { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:var(--red); padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; }
-    .btn-del-sm:hover { background:rgba(239,68,68,0.3); }
-    .no-blogs { text-align:center; padding:60px 20px; color:var(--text3); }
-    .no-blogs .icon { font-size:48px; margin-bottom:12px; }
+    .blog-grid{display:flex;flex-direction:column;gap:14px;}
+    .blog-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:all 0.25s;}
+    .blog-card:hover{border-color:var(--purple);transform:translateY(-1px);box-shadow:0 8px 30px rgba(124,58,237,0.15);}
+    .blog-card-img{width:100%;height:180px;object-fit:cover;display:block;}
+    .blog-card-body{padding:18px 20px;}
+    .blog-card-title{font-size:17px;font-weight:700;margin-bottom:8px;}
+    .blog-card-preview{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:12px;}
+    .blog-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text3);}
+    .blog-author{display:flex;align-items:center;gap:6px;}
+    .author-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple3));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;overflow:hidden;}
+    .author-avatar img{width:100%;height:100%;object-fit:cover;}
+    .verified-icon img{width:14px;height:14px;vertical-align:middle;}
+    .blog-actions{display:flex;align-items:center;gap:8px;}
+    .like-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--text3);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;}
+    .like-btn.liked{background:rgba(239,68,68,0.2);color:var(--red);border-color:rgba(239,68,68,0.4);}
+    .comment-count-btn{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);color:var(--text3);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;}
+    .btn-del-sm{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;}
+    .no-blogs{text-align:center;padding:60px 20px;color:var(--text3);}
+    .no-blogs .icon{font-size:48px;margin-bottom:12px;}
 
-    /* SEARCH */
-    .search-bar { position:relative; margin-bottom:20px; }
-    .search-bar input { width:100%; padding:11px 16px 11px 42px; background:var(--card); border:1px solid var(--border); border-radius:10px; font-size:14px; color:var(--text); }
-    .search-bar input:focus { outline:none; border-color:var(--purple); }
-    .search-bar .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:16px; }
+    .search-bar{position:relative;margin-bottom:20px;}
+    .search-bar input{width:100%;padding:11px 16px 11px 42px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:14px;color:var(--text);}
+    .search-bar input:focus{outline:none;border-color:var(--purple);}
+    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);}
 
-    /* DETAIL */
-    .detail-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
-    .detail-img { width:100%; max-height:350px; object-fit:cover; display:block; }
-    .detail-body { padding:28px 30px; }
-    .detail-card h2 { font-size:24px; font-weight:800; margin-bottom:12px; line-height:1.3; }
-    .detail-meta-bar { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); margin-bottom:22px; font-size:13px; color:var(--text3); }
-    .detail-author { display:flex; align-items:center; gap:8px; }
-    .detail-author-img { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--purple3)); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:white; overflow:hidden; }
-    .detail-author-img img { width:100%; height:100%; object-fit:cover; }
-    .detail-content { font-size:15px; line-height:1.9; color:var(--text2); white-space:pre-wrap; }
+    .detail-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+    .detail-img{width:100%;max-height:350px;object-fit:cover;display:block;}
+    .detail-body{padding:28px 30px;}
+    .detail-card h2{font-size:24px;font-weight:800;margin-bottom:12px;line-height:1.3;}
+    .detail-meta-bar{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:22px;font-size:13px;color:var(--text3);}
+    .detail-author{display:flex;align-items:center;gap:8px;}
+    .detail-author-img{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple3));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;overflow:hidden;}
+    .detail-author-img img{width:100%;height:100%;object-fit:cover;}
+    .detail-content{font-size:15px;line-height:1.9;color:var(--text2);white-space:pre-wrap;}
 
-    /* PROFILE PAGE */
-    .profile-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; margin-bottom:16px; }
-    .profile-header { display:flex; align-items:center; gap:20px; margin-bottom:24px; }
-    .profile-pic-wrap { position:relative; cursor:pointer; }
-    .profile-pic { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--purple3)); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:white; overflow:hidden; border:3px solid var(--border); }
-    .profile-pic img { width:100%; height:100%; object-fit:cover; }
-    .profile-pic-edit { position:absolute; bottom:0; right:0; background:var(--purple); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid var(--bg); }
-    .profile-info h2 { font-size:20px; font-weight:700; display:flex; align-items:center; gap:6px; }
-    .profile-info p { color:var(--text3); font-size:13px; margin-top:4px; }
-    .verified-badge-lg { color:#3b82f6; font-size:18px; }
-    .profile-stats { display:flex; gap:20px; margin-top:10px; }
-    .pstat { text-align:center; }
-    .pstat-num { font-size:20px; font-weight:700; color:var(--purple3); }
-    .pstat-lbl { font-size:12px; color:var(--text3); }
+    /* DETAIL ACTIONS */
+    .detail-actions{display:flex;align-items:center;gap:12px;margin:20px 0;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .action-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;border:none;transition:all 0.2s;}
+    .like-action-btn{background:rgba(239,68,68,0.1);color:var(--text2);border:1px solid rgba(239,68,68,0.2);}
+    .like-action-btn.liked{background:rgba(239,68,68,0.2);color:var(--red);border-color:var(--red);}
+    .follow-action-btn{background:rgba(124,58,237,0.1);color:var(--purple3);border:1px solid rgba(124,58,237,0.3);}
+    .follow-action-btn.following{background:rgba(124,58,237,0.2);border-color:var(--purple);}
 
-    /* HELP */
-    .help-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; margin-bottom:16px; }
-    .help-card h3 { font-size:17px; margin-bottom:16px; }
-    .ticket-item { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
-    .ticket-subject { font-size:14px; font-weight:600; margin-bottom:6px; }
-    .ticket-msg { font-size:13px; color:var(--text2); margin-bottom:8px; }
-    .ticket-reply { background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.3); border-radius:8px; padding:10px; margin-top:8px; font-size:13px; color:var(--purple3); }
-    .ticket-footer { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text3); }
-    .status-badge { padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
-    .status-open { background:rgba(245,158,11,0.2); color:var(--yellow); }
-    .status-replied { background:rgba(124,58,237,0.2); color:var(--purple3); }
-    .status-closed { background:rgba(16,185,129,0.2); color:var(--green); }
+    /* COMMENTS */
+    .comments-section{margin-top:20px;}
+    .comments-title{font-size:16px;font-weight:700;margin-bottom:16px;}
+    .comment-form{display:flex;gap:10px;margin-bottom:20px;}
+    .comment-form input{flex:1;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:inherit;}
+    .comment-form input:focus{outline:none;border-color:var(--purple);}
+    .comment-submit{padding:10px 16px;background:var(--purple);color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;}
+    .comment-item{display:flex;gap:10px;margin-bottom:14px;}
+    .comment-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple3));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;overflow:hidden;flex-shrink:0;}
+    .comment-avatar img{width:100%;height:100%;object-fit:cover;}
+    .comment-body{flex:1;background:var(--bg3);border-radius:10px;padding:10px 14px;}
+    .comment-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;margin-bottom:4px;}
+    .comment-text{font-size:13px;color:var(--text2);line-height:1.5;}
+    .comment-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+    .comment-time{font-size:11px;color:var(--text3);}
+    .comment-del{font-size:11px;color:var(--red);cursor:pointer;background:none;border:none;}
 
-    /* IMAGE UPLOAD PREVIEW */
-    .img-upload-area { border:2px dashed var(--border); border-radius:10px; padding:20px; text-align:center; cursor:pointer; transition:all 0.2s; margin-bottom:12px; }
-    .img-upload-area:hover { border-color:var(--purple); background:rgba(124,58,237,0.05); }
-    .img-upload-area p { color:var(--text3); font-size:13px; margin-top:8px; }
-    .img-preview { width:100%; max-height:200px; object-fit:cover; border-radius:8px; margin-top:10px; display:none; }
+    /* PROFILE */
+    .profile-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;}
+    .profile-header{display:flex;align-items:center;gap:20px;margin-bottom:24px;}
+    .profile-pic-wrap{position:relative;cursor:pointer;}
+    .profile-pic{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple3));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:white;overflow:hidden;border:3px solid var(--border);}
+    .profile-pic img{width:100%;height:100%;object-fit:cover;}
+    .profile-pic-edit{position:absolute;bottom:0;right:0;background:var(--purple);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid var(--bg);}
+    .profile-info h2{font-size:20px;font-weight:700;display:flex;align-items:center;gap:6px;}
+    .profile-info p{color:var(--text3);font-size:13px;margin-top:4px;}
+    .profile-stats{display:flex;gap:20px;margin-top:12px;}
+    .pstat{text-align:center;cursor:pointer;}
+    .pstat-num{font-size:20px;font-weight:700;color:var(--purple3);}
+    .pstat-lbl{font-size:12px;color:var(--text3);}
 
-    /* SECTION HEADER */
-    .sec-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
-    .sec-title { font-size:20px; font-weight:800; }
-    .sec-sub { color:var(--text3); font-size:13px; margin-top:2px; }
+    .help-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;}
+    .help-card h3{font-size:17px;margin-bottom:16px;}
+    .ticket-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+    .ticket-subject{font-size:14px;font-weight:600;margin-bottom:6px;}
+    .ticket-msg{font-size:13px;color:var(--text2);margin-bottom:8px;}
+    .ticket-reply{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:var(--purple3);}
+    .ticket-footer{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text3);}
+    .status-badge{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;}
+    .status-open{background:rgba(245,158,11,0.2);color:var(--yellow);}
+    .status-replied{background:rgba(124,58,237,0.2);color:var(--purple3);}
+    .status-closed{background:rgba(16,185,129,0.2);color:var(--green);}
 
-    /* BACK BTN */
-    .back-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:7px 14px; border-radius:8px; cursor:pointer; font-size:13px; margin-bottom:18px; display:inline-flex; align-items:center; gap:6px; }
-    .back-btn:hover { border-color:var(--purple); color:var(--purple3); }
+    .img-upload-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;}
+    .img-upload-area:hover{border-color:var(--purple);background:rgba(124,58,237,0.05);}
+    .img-upload-area p{color:var(--text3);font-size:13px;margin-top:8px;}
+    .img-preview{width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:10px;display:none;}
 
-    /* FORM */
-    .form-group { margin-bottom:16px; }
-    label { display:block; margin-bottom:6px; font-size:13px; color:var(--text2); font-weight:500; }
-    input[type="text"], input[type="email"], input[type="password"], textarea, select { width:100%; padding:10px 13px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; font-size:14px; color:var(--text); font-family:inherit; transition:border 0.2s; }
-    input:focus, textarea:focus, select:focus { outline:none; border-color:var(--purple); box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
-    textarea { resize:vertical; }
-    .btn { padding:10px 20px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; border:none; transition:all 0.2s; }
-    .btn-purple { background:var(--purple); color:white; } .btn-purple:hover { background:var(--purple2); }
-    .btn-full { width:100%; }
-    .btn-ghost { background:var(--bg3); border:1px solid var(--border); color:var(--text2); } .btn-ghost:hover { border-color:var(--purple); color:var(--purple3); }
-    .btn-sm { padding:7px 14px; font-size:13px; }
+    .sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+    .sec-title{font-size:20px;font-weight:800;}
+    .sec-sub{color:var(--text3);font-size:13px;margin-top:2px;}
+    .back-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:18px;display:inline-flex;align-items:center;gap:6px;}
 
-    .msg { padding:10px 14px; border-radius:8px; font-size:13px; margin-top:12px; display:none; }
-    .msg.success { background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); color:var(--green); display:block; }
-    .msg.error { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:var(--red); display:block; }
+    .form-group{margin-bottom:16px;}
+    label{display:block;margin-bottom:6px;font-size:13px;color:var(--text2);font-weight:500;}
+    input[type="text"],input[type="email"],input[type="password"],textarea,select{width:100%;padding:10px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:14px;color:var(--text);font-family:inherit;transition:border 0.2s;}
+    input:focus,textarea:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.15);}
+    textarea{resize:vertical;}
+    .btn{padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;border:none;transition:all 0.2s;}
+    .btn-purple{background:var(--purple);color:white;}
+    .btn-full{width:100%;}
+    .btn-ghost{background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+    .btn-sm{padding:7px 14px;font-size:13px;}
 
-    .visitor-info { text-align:center; margin-top:14px; font-size:12px; color:var(--text3); }
-    .hidden { display:none; }
-    .divider { height:1px; background:var(--border); margin:20px 0; }
-    .verify-request-btn { display:inline-flex; align-items:center; gap:6px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.4); color:var(--purple3); padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; }
-    .verified-tag { display:inline-flex; align-items:center; gap:4px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); color:#3b82f6; padding:6px 12px; border-radius:6px; font-size:13px; }
-    .upload-loading { color:var(--text3); font-size:13px; margin-top:8px; display:none; }
+    .msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;}
+    .msg.success{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:var(--green);display:block;}
+    .msg.error{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--red);display:block;}
+
+    .visitor-info{text-align:center;margin-top:14px;font-size:12px;color:var(--text3);}
+    .hidden{display:none;}
+    .divider{height:1px;background:var(--border);margin:20px 0;}
+    .verify-request-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);color:var(--purple3);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;}
+    .verified-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:var(--blue);padding:6px 12px;border-radius:6px;font-size:13px;}
+    .upload-loading{color:var(--text3);font-size:13px;margin-top:8px;display:none;}
+
+    .VICON{width:14px;height:14px;vertical-align:middle;margin-left:2px;}
   </style>
 </head>
 <body>
 
-<!-- AUTH PAGE -->
 <div id="authPage">
   <div class="auth-wrap">
     <div class="auth-logo">
@@ -190,13 +195,13 @@
         <button class="tab" id="signupTab" onclick="showTab('signup')">Sign Up</button>
       </div>
       <form id="loginForm">
-        <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" placeholder="your@email.com" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="your@email.com" required></div>
         <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" required></div>
         <button type="submit" class="btn btn-purple btn-full">Login করুন</button>
       </form>
       <form id="signupForm" class="hidden">
         <div class="form-group"><label>পুরো নাম</label><input type="text" id="signupName" placeholder="আপনার নাম" required></div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="signupEmail" placeholder="your@email.com" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="your@email.com" required></div>
         <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="কমপক্ষে ৬ অক্ষর" required></div>
         <button type="submit" class="btn btn-purple btn-full">Account তৈরি করুন</button>
       </form>
@@ -206,7 +211,6 @@
   </div>
 </div>
 
-<!-- MAIN PAGE -->
 <div id="mainPage">
   <nav class="navbar">
     <div class="nav-logo" onclick="goTo('home')">Nex<span>Blog</span></div>
@@ -222,7 +226,6 @@
     </div>
   </nav>
 
-  <!-- Notification Panel -->
   <div class="notif-panel" id="notifPanel">
     <div class="notif-header">
       <span>🔔 Notifications</span>
@@ -233,7 +236,7 @@
 
   <div class="page-wrap">
 
-    <!-- HOME VIEW -->
+    <!-- HOME -->
     <div class="view active" id="homeView">
       <div class="sec-header">
         <div><div class="sec-title">সকল Article</div><div class="sec-sub" id="homeSubtitle"></div></div>
@@ -245,7 +248,7 @@
       <div class="blog-grid" id="blogList"><div class="no-blogs"><div class="icon">📝</div>Loading...</div></div>
     </div>
 
-    <!-- WRITE VIEW -->
+    <!-- WRITE -->
     <div class="view" id="writeView">
       <div class="sec-header">
         <div><div class="sec-title">✏️ নতুন Article</div></div>
@@ -253,25 +256,19 @@
       </div>
       <div class="write-card">
         <form id="blogForm">
-          <div class="form-group">
-            <label>Article এর Title</label>
-            <input type="text" id="blogTitle" placeholder="আপনার article এর শিরোনাম লিখুন..." required>
-          </div>
+          <div class="form-group"><label>Article এর Title</label><input type="text" id="blogTitle" placeholder="শিরোনাম লিখুন..." required></div>
           <div class="form-group">
             <label>Article এর সাথে Image (ঐচ্ছিক)</label>
             <div class="img-upload-area" onclick="document.getElementById('articleImgInput').click()">
               <div style="font-size:32px">🖼️</div>
-              <p>Click করে image বেছে নিন (JPG, PNG, max 5MB)</p>
+              <p>Click করে image বেছে নিন</p>
               <img class="img-preview" id="articleImgPreview">
             </div>
             <input type="file" id="articleImgInput" accept="image/*" style="display:none" onchange="previewArticleImg(this)">
             <div class="upload-loading" id="articleUploadLoading">⏳ Image upload হচ্ছে...</div>
           </div>
-          <div class="form-group">
-            <label>Article এর বিষয়বস্তু</label>
-            <textarea id="blogContent" rows="12" placeholder="এখানে আপনার article লিখুন..." required></textarea>
-          </div>
-          <div style="display:flex; gap:10px;">
+          <div class="form-group"><label>Article এর বিষয়বস্তু</label><textarea id="blogContent" rows="12" placeholder="এখানে লিখুন..." required></textarea></div>
+          <div style="display:flex;gap:10px;">
             <button type="submit" class="btn btn-purple" id="publishBtn">🚀 প্রকাশ করুন</button>
             <button type="button" class="btn btn-ghost" onclick="goTo('home')">বাতিল</button>
           </div>
@@ -280,7 +277,7 @@
       </div>
     </div>
 
-    <!-- DETAIL VIEW -->
+    <!-- DETAIL -->
     <div class="view" id="detailView">
       <button class="back-btn" onclick="goTo('home')">← সব Article</button>
       <div class="detail-card">
@@ -291,17 +288,33 @@
             <div class="detail-author">
               <div class="detail-author-img" id="detailAuthorImg"></div>
               <span id="detailAuthor"></span>
-              <span id="detailVerifiedBadge" style="display:none" class="verified-icon"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>
+              <span id="detailVerifiedBadge" style="display:none"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" class="VICON"></span>
             </div>
             <span>•</span>
             <span id="detailDate"></span>
           </div>
           <div class="detail-content" id="detailContent"></div>
+
+          <!-- ACTIONS -->
+          <div class="detail-actions">
+            <button class="action-btn like-action-btn" id="likeActionBtn" onclick="likeCurrentBlog()">❤️ <span id="likeCountDetail">0</span> Like</button>
+            <button class="action-btn follow-action-btn" id="followActionBtn" onclick="followCurrentAuthor()" style="display:none">➕ Follow</button>
+          </div>
+
+          <!-- COMMENTS -->
+          <div class="comments-section">
+            <div class="comments-title">💬 Comments (<span id="commentCount">0</span>)</div>
+            <div class="comment-form">
+              <input type="text" id="commentInput" placeholder="Comment লিখুন...">
+              <button class="comment-submit" onclick="submitComment()">পাঠান</button>
+            </div>
+            <div id="commentList"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- PROFILE VIEW -->
+    <!-- PROFILE -->
     <div class="view" id="profileView">
       <div class="sec-header">
         <div><div class="sec-title">👤 আমার Profile</div></div>
@@ -309,67 +322,64 @@
       </div>
       <div class="profile-card">
         <div class="profile-header">
-          <div class="profile-pic-wrap" onclick="document.getElementById('profileImgInput').click()" title="Click করে photo পরিবর্তন করুন">
+          <div class="profile-pic-wrap" onclick="document.getElementById('profileImgInput').click()">
             <div class="profile-pic" id="profilePic"></div>
             <div class="profile-pic-edit">✏️</div>
           </div>
           <input type="file" id="profileImgInput" accept="image/*" style="display:none" onchange="uploadProfileImage(this)">
           <div class="profile-info">
-            <h2 id="profileName">
+            <h2>
               <span id="profileNameText"></span>
-              <span id="profileVerifiedBadge" style="display:none" class="verified-badge-lg"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>
+              <span id="profileVerifiedBadge" style="display:none"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" class="VICON" style="width:20px;height:20px;"></span>
             </h2>
             <p id="profileEmail"></p>
-            <p id="profileJoined" style="margin-top:4px; font-size:12px;"></p>
             <div class="profile-stats">
               <div class="pstat"><div class="pstat-num" id="profileArticleCount">0</div><div class="pstat-lbl">Articles</div></div>
+              <div class="pstat"><div class="pstat-num" id="profileFollowers">0</div><div class="pstat-lbl">Followers</div></div>
+              <div class="pstat"><div class="pstat-num" id="profileFollowing">0</div><div class="pstat-lbl">Following</div></div>
             </div>
           </div>
         </div>
         <div class="upload-loading" id="profileUploadLoading">⏳ Photo upload হচ্ছে...</div>
-
-        <!-- Edit Name -->
         <div class="divider"></div>
         <div class="form-group">
           <label>নাম পরিবর্তন করুন</label>
-          <div style="display:flex; gap:10px;">
+          <div style="display:flex;gap:10px;">
             <input type="text" id="editNameInput" placeholder="নতুন নাম লিখুন">
             <button class="btn btn-purple btn-sm" onclick="updateName()">Save</button>
           </div>
           <div class="msg" id="nameMsg"></div>
         </div>
       </div>
-
-      <!-- My Articles -->
       <div class="profile-card">
-        <h3 style="font-size:17px; margin-bottom:16px;">📝 আমার Articles</h3>
-        <div id="myArticlesList"><div style="color:var(--text3); font-size:13px;">Loading...</div></div>
+        <h3 style="font-size:17px;margin-bottom:16px;">📝 আমার Articles</h3>
+        <div id="myArticlesList"><div style="color:var(--text3);font-size:13px;">Loading...</div></div>
       </div>
     </div>
 
-    <!-- HELP VIEW -->
+    <!-- HELP -->
     <div class="view" id="helpView">
       <div class="sec-header">
-        <div><div class="sec-title">🎫 Help Center</div><div class="sec-sub">Support team-এর সাথে যোগাযোগ করুন</div></div>
+        <div><div class="sec-title">🎫 Help Center</div></div>
         <button class="back-btn" onclick="goTo('home')">← ফিরে যান</button>
       </div>
-      <div class="help-card" id="verifySection">
+      <div class="help-card">
         <h3>✅ ID Verification</h3>
-        <p style="font-size:13px; color:var(--text2); margin-bottom:14px;">Account verify করলে আপনার নামের পাশে <span style="color:#3b82f6"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span> badge দেখাবে।</p>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">Account verify করলে নামের পাশে verified badge দেখাবে।</p>
         <div id="verifyStatus"></div>
       </div>
       <div class="help-card">
         <h3>📩 নতুন Support Ticket</h3>
         <form id="ticketForm">
-          <div class="form-group"><label>বিষয় (Subject)</label><input type="text" id="ticketSubject" placeholder="সমস্যার বিষয় লিখুন" required></div>
-          <div class="form-group"><label>বিস্তারিত বলুন</label><textarea id="ticketMsg" rows="5" placeholder="আপনার সমস্যা বিস্তারিত লিখুন..." required></textarea></div>
+          <div class="form-group"><label>বিষয়</label><input type="text" id="ticketSubject" placeholder="সমস্যার বিষয় লিখুন" required></div>
+          <div class="form-group"><label>বিস্তারিত</label><textarea id="ticketMsg" rows="5" placeholder="আপনার সমস্যা লিখুন..." required></textarea></div>
           <button type="submit" class="btn btn-purple">Ticket পাঠান</button>
         </form>
         <div class="msg" id="ticketMsg2"></div>
       </div>
       <div class="help-card">
         <h3>📋 আমার Tickets</h3>
-        <div id="myTickets"><div style="color:var(--text3); font-size:13px;">Loading...</div></div>
+        <div id="myTickets"><div style="color:var(--text3);font-size:13px;">Loading...</div></div>
       </div>
     </div>
 
@@ -378,12 +388,14 @@
 
 <script>
   const API = '';
+  const VICON = '<img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" class="VICON">';
   let currentUser = null;
   let allBlogs = [];
   let notifOpen = false;
   let articleImageUrl = '';
+  let currentBlogId = null;
+  let currentBlogAuthorId = null;
 
-  // VISITOR
   window.addEventListener('load', async () => {
     try {
       const r = await fetch(`${API}/api/visitor/increment`, { method: 'POST' });
@@ -392,18 +404,12 @@
     } catch {}
   });
 
-  // AUTH
   function showTab(tab) {
-    document.getElementById('loginTab').classList.toggle('active', tab === 'login');
-    document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
-    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-    document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+    document.getElementById('loginTab').classList.toggle('active', tab==='login');
+    document.getElementById('signupTab').classList.toggle('active', tab==='signup');
+    document.getElementById('loginForm').classList.toggle('hidden', tab!=='login');
+    document.getElementById('signupForm').classList.toggle('hidden', tab!=='signup');
     document.getElementById('authMsg').className = 'msg';
-  }
-
-  function showAuthMsg(text, type) {
-    const el = document.getElementById('authMsg');
-    el.textContent = text; el.className = `msg ${type}`;
   }
 
   document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -414,21 +420,22 @@
       const r = await fetch(`${API}/api/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
       const d = await r.json();
       if (d.success) { currentUser = d.user; enterMain(); }
-      else showAuthMsg(d.message, 'error');
-    } catch { showAuthMsg('Server এর সাথে যোগাযোগ করা যাচ্ছে না', 'error'); }
+      else { const el=document.getElementById('authMsg'); el.textContent=d.message; el.className='msg error'; }
+    } catch { const el=document.getElementById('authMsg'); el.textContent='Server error'; el.className='msg error'; }
   });
 
   document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
+    const name=document.getElementById('signupName').value;
+    const email=document.getElementById('signupEmail').value;
+    const password=document.getElementById('signupPassword').value;
     try {
       const r = await fetch(`${API}/api/signup`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email, password}) });
       const d = await r.json();
-      if (d.success) { showAuthMsg(d.message, 'success'); document.getElementById('signupForm').reset(); }
-      else showAuthMsg(d.message, 'error');
-    } catch { showAuthMsg('Server এর সাথে যোগাযোগ করা যাচ্ছে না', 'error'); }
+      const el=document.getElementById('authMsg');
+      el.textContent=d.message; el.className=`msg ${d.success?'success':'error'}`;
+      if (d.success) document.getElementById('signupForm').reset();
+    } catch {}
   });
 
   function enterMain() {
@@ -441,38 +448,31 @@
 
   function updateNavUser() {
     const avatar = document.getElementById('navAvatar');
-    if (currentUser.profileImage) {
-      avatar.innerHTML = `<img src="${currentUser.profileImage}" alt="avatar">`;
-    } else {
-      const initials = currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      avatar.textContent = initials;
-    }
-    document.getElementById('navName').textContent = currentUser.name + (currentUser.isVerified ? ' <img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;">' : '');
+    if (currentUser.profileImage) avatar.innerHTML = `<img src="${currentUser.profileImage}" alt="">`;
+    else { const i=currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); avatar.textContent=i; }
+    document.getElementById('navName').textContent = currentUser.name + (currentUser.isVerified ? ' ✔️' : '');
   }
 
   function logout() {
-    currentUser = null; allBlogs = []; articleImageUrl = '';
-    document.getElementById('authPage').style.display = 'flex';
-    document.getElementById('mainPage').style.display = 'none';
+    currentUser=null; allBlogs=[]; articleImageUrl='';
+    document.getElementById('authPage').style.display='flex';
+    document.getElementById('mainPage').style.display='none';
     document.getElementById('loginForm').reset();
-    document.getElementById('authMsg').className = 'msg';
+    document.getElementById('authMsg').className='msg';
     goTo('home');
   }
 
-  // NAVIGATION
   function goTo(view) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById(view + 'View').classList.add('active');
-    if (view === 'home') loadBlogs();
-    if (view === 'help') loadHelpPage();
-    if (view === 'profile') loadProfilePage();
-    if (view === 'write') { articleImageUrl = ''; document.getElementById('articleImgPreview').style.display='none'; document.getElementById('blogForm').reset(); }
-    notifOpen = false;
-    document.getElementById('notifPanel').classList.remove('show');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(view+'View').classList.add('active');
+    if (view==='home') loadBlogs();
+    if (view==='help') loadHelpPage();
+    if (view==='profile') loadProfilePage();
+    if (view==='write') { articleImageUrl=''; document.getElementById('articleImgPreview').style.display='none'; document.getElementById('blogForm').reset(); }
+    notifOpen=false; document.getElementById('notifPanel').classList.remove('show');
     window.scrollTo(0,0);
   }
 
-  // NOTIFICATIONS
   async function loadNotifications() {
     if (!currentUser) return;
     try {
@@ -480,13 +480,13 @@
       const d = await r.json();
       if (!d.success) return;
       const countEl = document.getElementById('notifCount');
-      if (d.unreadCount > 0) { countEl.textContent = d.unreadCount; countEl.style.display = 'flex'; }
-      else { countEl.style.display = 'none'; }
+      if (d.unreadCount > 0) { countEl.textContent=d.unreadCount; countEl.style.display='flex'; }
+      else countEl.style.display='none';
       const list = document.getElementById('notifList');
-      if (d.notifications.length === 0) { list.innerHTML = '<div class="no-notif">📭 কোনো notification নেই</div>'; return; }
-      list.innerHTML = d.notifications.map(n => `
-        <div class="notif-item ${n.isRead ? '' : 'unread'}">
-          <div class="notif-msg"><span class="notif-dot dot-${n.type}"></span>${esc(n.message)}</div>
+      if (!d.notifications.length) { list.innerHTML='<div class="no-notif">📭 কোনো notification নেই</div>'; return; }
+      list.innerHTML = d.notifications.map(n=>`
+        <div class="notif-item ${n.isRead?'':'unread'}">
+          <div><span class="notif-dot dot-${n.type}"></span>${esc(n.message)}</div>
           <div class="notif-time">${timeAgo(n.createdAt)}</div>
         </div>
       `).join('');
@@ -494,73 +494,57 @@
   }
 
   function toggleNotif() {
-    notifOpen = !notifOpen;
+    notifOpen=!notifOpen;
     document.getElementById('notifPanel').classList.toggle('show', notifOpen);
     if (notifOpen) loadNotifications();
   }
 
   async function markAllRead() {
-    if (!currentUser) return;
     await fetch(`${API}/api/notifications/read/${currentUser._id}`, { method:'POST' });
     loadNotifications();
   }
 
   document.addEventListener('click', (e) => {
     if (notifOpen && !e.target.closest('.notif-panel') && !e.target.closest('#notifBtn')) {
-      notifOpen = false;
-      document.getElementById('notifPanel').classList.remove('show');
+      notifOpen=false; document.getElementById('notifPanel').classList.remove('show');
     }
   });
 
-  // ARTICLE IMAGE
   function previewArticleImg(input) {
     if (!input.files || !input.files[0]) return;
-    const file = input.files[0];
     const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('articleImgPreview');
-      prev.src = e.target.result;
-      prev.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
+    reader.onload = e => { const p=document.getElementById('articleImgPreview'); p.src=e.target.result; p.style.display='block'; };
+    reader.readAsDataURL(input.files[0]);
   }
 
   async function uploadArticleImage(file) {
     const formData = new FormData();
     formData.append('image', file);
-    document.getElementById('articleUploadLoading').style.display = 'block';
-    document.getElementById('publishBtn').disabled = true;
+    document.getElementById('articleUploadLoading').style.display='block';
+    document.getElementById('publishBtn').disabled=true;
     try {
       const r = await fetch(`${API}/api/upload/article`, { method:'POST', body: formData });
       const d = await r.json();
-      if (d.success) { articleImageUrl = d.imageUrl; }
+      if (d.success) articleImageUrl = d.imageUrl;
     } catch {}
-    document.getElementById('articleUploadLoading').style.display = 'none';
-    document.getElementById('publishBtn').disabled = false;
+    document.getElementById('articleUploadLoading').style.display='none';
+    document.getElementById('publishBtn').disabled=false;
   }
 
-  // PROFILE IMAGE
   async function uploadProfileImage(input) {
     if (!input.files || !input.files[0]) return;
-    const file = input.files[0];
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', input.files[0]);
     formData.append('userId', currentUser._id);
-    document.getElementById('profileUploadLoading').style.display = 'block';
+    document.getElementById('profileUploadLoading').style.display='block';
     try {
       const r = await fetch(`${API}/api/upload/profile`, { method:'POST', body: formData });
       const d = await r.json();
-      if (d.success) {
-        currentUser.profileImage = d.imageUrl;
-        loadProfilePage();
-        updateNavUser();
-        loadNotifications();
-      }
+      if (d.success) { currentUser.profileImage=d.imageUrl; loadProfilePage(); updateNavUser(); }
     } catch {}
-    document.getElementById('profileUploadLoading').style.display = 'none';
+    document.getElementById('profileUploadLoading').style.display='none';
   }
 
-  // BLOGS
   async function loadBlogs() {
     try {
       const r = await fetch(`${API}/api/blogs`);
@@ -573,44 +557,58 @@
   function filterBlogs() {
     const q = document.getElementById('searchInput').value.toLowerCase();
     if (!q) { renderBlogs(allBlogs); return; }
-    const filtered = allBlogs.filter(b => b.title.toLowerCase().includes(q) || b.content.toLowerCase().includes(q) || b.authorName.toLowerCase().includes(q));
-    renderBlogs(filtered);
+    renderBlogs(allBlogs.filter(b=>b.title.toLowerCase().includes(q)||b.content.toLowerCase().includes(q)||b.authorName.toLowerCase().includes(q)));
   }
 
   function renderBlogs(blogs) {
     const container = document.getElementById('blogList');
     document.getElementById('homeSubtitle').textContent = `${blogs.length}টি article`;
-    if (!blogs.length) {
-      container.innerHTML = '<div class="no-blogs"><div class="icon">📝</div><p>কোনো article পাওয়া যায়নি।</p></div>';
-      return;
-    }
+    if (!blogs.length) { container.innerHTML='<div class="no-blogs"><div class="icon">📝</div><p>কোনো article নেই।</p></div>'; return; }
     container.innerHTML = blogs.map(b => {
-      const preview = b.content.length > 130 ? b.content.slice(0, 130) + '...' : b.content;
-      const isOwner = currentUser && b.authorId === currentUser._id;
-      const initial = b.authorName[0].toUpperCase();
+      const preview = b.content.length>130 ? b.content.slice(0,130)+'...' : b.content;
+      const isOwner = currentUser && b.authorId===currentUser._id;
+      const liked = currentUser && b.likes && b.likes.includes(currentUser._id);
+      const likeCount = b.likes ? b.likes.length : 0;
       const authorAvatar = b.authorImage
         ? `<div class="author-avatar"><img src="${b.authorImage}" alt=""></div>`
-        : `<div class="author-avatar">${initial}</div>`;
+        : `<div class="author-avatar">${b.authorName[0].toUpperCase()}</div>`;
       return `
-        <div class="blog-card" onclick="viewBlog('${b._id}')">
-          ${b.image ? `<img class="blog-card-img" src="${b.image}" alt="${esc(b.title)}">` : ''}
+        <div class="blog-card">
+          ${b.image ? `<img class="blog-card-img" src="${b.image}" alt="" onclick="viewBlog('${b._id}')">` : ''}
           <div class="blog-card-body">
-            <div class="blog-card-title">${esc(b.title)}</div>
-            <div class="blog-card-preview">${esc(preview)}</div>
+            <div class="blog-card-title" onclick="viewBlog('${b._id}')">${esc(b.title)}</div>
+            <div class="blog-card-preview" onclick="viewBlog('${b._id}')">${esc(preview)}</div>
             <div class="blog-meta">
               <div class="blog-author">
                 ${authorAvatar}
-                <span>${esc(b.authorName)}</span>
-                ${b.authorVerified ? '<span class="verified-icon"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>' : ''}
+                <span onclick="viewBlog('${b._id}')">${esc(b.authorName)}</span>
+                ${b.authorVerified ? `<span class="verified-icon">${VICON}</span>` : ''}
                 <span style="color:var(--border)">•</span>
                 <span>${formatDate(b.createdAt)}</span>
               </div>
-              ${isOwner ? `<button class="btn-del-sm" onclick="deleteBlog(event,'${b._id}')">🗑 Delete</button>` : ''}
+              <div class="blog-actions">
+                <button class="like-btn ${liked?'liked':''}" onclick="quickLike(event,'${b._id}',this)">❤️ ${likeCount}</button>
+                <button class="comment-count-btn" onclick="viewBlog('${b._id}')">💬</button>
+                ${isOwner ? `<button class="btn-del-sm" onclick="deleteBlog(event,'${b._id}')">🗑</button>` : ''}
+              </div>
             </div>
           </div>
         </div>
       `;
     }).join('');
+  }
+
+  async function quickLike(e, blogId, btn) {
+    e.stopPropagation();
+    if (!currentUser) return;
+    try {
+      const r = await fetch(`${API}/api/blogs/${blogId}/like`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id}) });
+      const d = await r.json();
+      if (d.success) {
+        btn.className = `like-btn ${d.liked?'liked':''}`;
+        btn.textContent = `❤️ ${d.likeCount}`;
+      }
+    } catch {}
   }
 
   async function viewBlog(id) {
@@ -619,19 +617,128 @@
       const d = await r.json();
       if (!d.success) return;
       const b = d.blog;
+      currentBlogId = id;
+      currentBlogAuthorId = b.authorId;
+
       const detailImg = document.getElementById('detailImg');
-      if (b.image) { detailImg.src = b.image; detailImg.style.display = 'block'; }
-      else { detailImg.style.display = 'none'; }
+      if (b.image) { detailImg.src=b.image; detailImg.style.display='block'; }
+      else detailImg.style.display='none';
+
       document.getElementById('detailTitle').textContent = b.title;
       const authorImgEl = document.getElementById('detailAuthorImg');
-      if (b.authorImage) authorImgEl.innerHTML = `<img src="${b.authorImage}" alt="">`;
-      else authorImgEl.textContent = b.authorName[0].toUpperCase();
+      if (b.authorImage) authorImgEl.innerHTML=`<img src="${b.authorImage}" alt="">`;
+      else authorImgEl.textContent=b.authorName[0].toUpperCase();
       document.getElementById('detailAuthor').textContent = b.authorName;
-      const badge = document.getElementById('detailVerifiedBadge');
-      badge.style.display = b.authorVerified ? 'inline' : 'none';
+      document.getElementById('detailVerifiedBadge').style.display = b.authorVerified ? 'inline' : 'none';
       document.getElementById('detailDate').textContent = '📅 ' + formatDate(b.createdAt);
       document.getElementById('detailContent').textContent = b.content;
+
+      // Like button
+      const liked = currentUser && b.likes && b.likes.map(String).includes(currentUser._id);
+      const likeBtn = document.getElementById('likeActionBtn');
+      likeBtn.className = `action-btn like-action-btn ${liked?'liked':''}`;
+      document.getElementById('likeCountDetail').textContent = b.likes ? b.likes.length : 0;
+
+      // Follow button
+      const followBtn = document.getElementById('followActionBtn');
+      if (currentUser && b.authorId !== currentUser._id) {
+        followBtn.style.display = 'flex';
+        const isFollowing = currentUser.following && currentUser.following.map(String).includes(b.authorId);
+        followBtn.className = `action-btn follow-action-btn ${isFollowing?'following':''}`;
+        followBtn.textContent = isFollowing ? '✓ Following' : '➕ Follow';
+      } else followBtn.style.display = 'none';
+
       goTo('detail');
+      loadComments(id);
+    } catch {}
+  }
+
+  async function likeCurrentBlog() {
+    if (!currentUser || !currentBlogId) return;
+    try {
+      const r = await fetch(`${API}/api/blogs/${currentBlogId}/like`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id}) });
+      const d = await r.json();
+      if (d.success) {
+        const likeBtn = document.getElementById('likeActionBtn');
+        likeBtn.className = `action-btn like-action-btn ${d.liked?'liked':''}`;
+        document.getElementById('likeCountDetail').textContent = d.likeCount;
+      }
+    } catch {}
+  }
+
+  async function followCurrentAuthor() {
+    if (!currentUser || !currentBlogAuthorId) return;
+    try {
+      const r = await fetch(`${API}/api/user/follow`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({followerId: currentUser._id, followingId: currentBlogAuthorId}) });
+      const d = await r.json();
+      if (d.success) {
+        const followBtn = document.getElementById('followActionBtn');
+        followBtn.className = `action-btn follow-action-btn ${d.followed?'following':''}`;
+        followBtn.textContent = d.followed ? '✓ Following' : '➕ Follow';
+        if (d.followed) {
+          if (!currentUser.following) currentUser.following = [];
+          currentUser.following.push(currentBlogAuthorId);
+        } else {
+          currentUser.following = (currentUser.following||[]).filter(id=>String(id)!==currentBlogAuthorId);
+        }
+      }
+    } catch {}
+  }
+
+  async function loadComments(blogId) {
+    try {
+      const r = await fetch(`${API}/api/blogs/${blogId}/comments`);
+      const d = await r.json();
+      document.getElementById('commentCount').textContent = d.comments ? d.comments.length : 0;
+      const list = document.getElementById('commentList');
+      if (!d.comments || !d.comments.length) { list.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">এখনো কোনো comment নেই। প্রথম comment করুন!</div>'; return; }
+      list.innerHTML = d.comments.map(c => {
+        const isOwner = currentUser && c.userId === currentUser._id;
+        const avatar = c.userImage
+          ? `<div class="comment-avatar"><img src="${c.userImage}" alt=""></div>`
+          : `<div class="comment-avatar">${c.userName[0].toUpperCase()}</div>`;
+        return `
+          <div class="comment-item">
+            ${avatar}
+            <div class="comment-body">
+              <div class="comment-name">${esc(c.userName)}${c.userVerified?VICON:''}</div>
+              <div class="comment-text">${esc(c.text)}</div>
+              <div class="comment-footer">
+                <span class="comment-time">${timeAgo(c.createdAt)}</span>
+                ${isOwner ? `<button class="comment-del" onclick="deleteComment('${c._id}')">🗑 Delete</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch {}
+  }
+
+  async function submitComment() {
+    if (!currentUser || !currentBlogId) return;
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) return;
+    try {
+      const r = await fetch(`${API}/api/blogs/${currentBlogId}/comments`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ userId: currentUser._id, userName: currentUser.name, userImage: currentUser.profileImage||'', userVerified: currentUser.isVerified||false, text })
+      });
+      const d = await r.json();
+      if (d.success) { input.value=''; loadComments(currentBlogId); loadNotifications(); }
+    } catch {}
+  }
+
+  document.addEventListener('keypress', e => {
+    if (e.key==='Enter' && document.activeElement===document.getElementById('commentInput')) submitComment();
+  });
+
+  async function deleteComment(commentId) {
+    if (!confirm('Comment delete করবেন?')) return;
+    try {
+      const r = await fetch(`${API}/api/comments/${commentId}`, { method:'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id}) });
+      const d = await r.json();
+      if (d.success) loadComments(currentBlogId);
     } catch {}
   }
 
@@ -642,7 +749,6 @@
       const r = await fetch(`${API}/api/blogs/${id}`, { method:'DELETE', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id}) });
       const d = await r.json();
       if (d.success) { loadBlogs(); loadNotifications(); }
-      else alert(d.message);
     } catch {}
   }
 
@@ -651,48 +757,49 @@
     const title = document.getElementById('blogTitle').value;
     const content = document.getElementById('blogContent').value;
     const imgInput = document.getElementById('articleImgInput');
-    if (imgInput.files && imgInput.files[0]) {
-      await uploadArticleImage(imgInput.files[0]);
-    }
+    if (imgInput.files && imgInput.files[0]) await uploadArticleImage(imgInput.files[0]);
     try {
       const r = await fetch(`${API}/api/blogs`, {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ title, content, image: articleImageUrl, authorId: currentUser._id, authorName: currentUser.name, authorImage: currentUser.profileImage || '', authorVerified: currentUser.isVerified || false })
+        body: JSON.stringify({ title, content, image: articleImageUrl, authorId: currentUser._id, authorName: currentUser.name, authorImage: currentUser.profileImage||'', authorVerified: currentUser.isVerified||false })
       });
       const d = await r.json();
       const msg = document.getElementById('blogMsg');
-      msg.textContent = d.message; msg.className = `msg ${d.success ? 'success' : 'error'}`;
+      msg.textContent=d.message; msg.className=`msg ${d.success?'success':'error'}`;
       if (d.success) {
         document.getElementById('blogForm').reset();
-        articleImageUrl = '';
-        document.getElementById('articleImgPreview').style.display = 'none';
+        articleImageUrl='';
+        document.getElementById('articleImgPreview').style.display='none';
         setTimeout(() => { msg.className='msg'; goTo('home'); loadNotifications(); }, 1200);
       }
     } catch {}
   });
 
-  // PROFILE PAGE
   async function loadProfilePage() {
     if (!currentUser) return;
     const picEl = document.getElementById('profilePic');
-    if (currentUser.profileImage) picEl.innerHTML = `<img src="${currentUser.profileImage}" alt="profile">`;
-    else picEl.textContent = currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    if (currentUser.profileImage) picEl.innerHTML=`<img src="${currentUser.profileImage}" alt="">`;
+    else picEl.textContent=currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
     document.getElementById('profileNameText').textContent = currentUser.name;
     document.getElementById('editNameInput').value = currentUser.name;
     document.getElementById('profileEmail').textContent = currentUser.email;
-    const badge = document.getElementById('profileVerifiedBadge');
-    badge.style.display = currentUser.isVerified ? 'inline' : 'none';
+    document.getElementById('profileVerifiedBadge').style.display = currentUser.isVerified ? 'inline' : 'none';
     try {
-      const r = await fetch(`${API}/api/blogs/user/${currentUser._id}`);
+      const r = await fetch(`${API}/api/user/${currentUser._id}`);
       const d = await r.json();
-      document.getElementById('profileArticleCount').textContent = d.blogs?.length || 0;
-      document.getElementById('profileJoined').textContent = '';
+      if (d.success) {
+        document.getElementById('profileFollowers').textContent = d.user.followers?.length || 0;
+        document.getElementById('profileFollowing').textContent = d.user.following?.length || 0;
+      }
+      const r2 = await fetch(`${API}/api/blogs/user/${currentUser._id}`);
+      const d2 = await r2.json();
+      document.getElementById('profileArticleCount').textContent = d2.blogs?.length || 0;
       const myList = document.getElementById('myArticlesList');
-      if (!d.blogs || !d.blogs.length) { myList.innerHTML = '<div style="color:var(--text3); font-size:13px;">এখনো কোনো article লেখা হয়নি।</div>'; return; }
-      myList.innerHTML = d.blogs.map(b => `
+      if (!d2.blogs || !d2.blogs.length) { myList.innerHTML='<div style="color:var(--text3);font-size:13px;">এখনো কোনো article লেখা হয়নি।</div>'; return; }
+      myList.innerHTML = d2.blogs.map(b=>`
         <div class="ticket-item" style="cursor:pointer" onclick="viewBlog('${b._id}')">
           <div class="ticket-subject">${esc(b.title)}</div>
-          <div style="font-size:12px; color:var(--text3); margin-top:4px;">${formatDate(b.createdAt)}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px;">${formatDate(b.createdAt)} • ❤️ ${b.likes?b.likes.length:0}</div>
         </div>
       `).join('');
     } catch {}
@@ -700,45 +807,33 @@
 
   async function updateName() {
     const name = document.getElementById('editNameInput').value.trim();
-    if (!name || name.length < 2) { showMsg('nameMsg', 'নাম কমপক্ষে ২ অক্ষর হতে হবে', 'error'); return; }
+    if (!name || name.length<2) { showMsg('nameMsg','নাম কমপক্ষে ২ অক্ষর','error'); return; }
     try {
-      const r = await fetch(`${API}/api/user/update-name`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: currentUser._id, name }) });
+      const r = await fetch(`${API}/api/user/update-name`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId: currentUser._id, name}) });
       const d = await r.json();
       if (d.success) {
-        currentUser.name = d.user.name;
-        updateNavUser();
-        loadProfilePage();
-        showMsg('nameMsg', 'নাম সফলভাবে পরিবর্তন হয়েছে!', 'success');
-        setTimeout(() => { document.getElementById('nameMsg').className = 'msg'; }, 2000);
-      } else showMsg('nameMsg', d.message, 'error');
-    } catch { showMsg('nameMsg', 'Server error', 'error'); }
+        currentUser.name=d.user.name; updateNavUser(); loadProfilePage();
+        showMsg('nameMsg','নাম সফলভাবে পরিবর্তন হয়েছে!','success');
+        setTimeout(()=>{ document.getElementById('nameMsg').className='msg'; },2000);
+      } else showMsg('nameMsg',d.message,'error');
+    } catch {}
   }
 
-  function showMsg(id, text, type) {
-    const el = document.getElementById(id);
-    el.textContent = text; el.className = `msg ${type}`;
-  }
+  function showMsg(id,text,type) { const el=document.getElementById(id); el.textContent=text; el.className=`msg ${type}`; }
 
-  // HELP CENTER
   async function loadHelpPage() {
     loadMyTickets();
     const verifyEl = document.getElementById('verifyStatus');
     if (currentUser.isVerified) {
-      verifyEl.innerHTML = '<div class="verified-tag"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"> আপনার account verified আছে</div>';
+      verifyEl.innerHTML=`<div class="verified-tag">${VICON} আপনার account verified আছে</div>`;
     } else {
-      verifyEl.innerHTML = `
-        <button class="verify-request-btn" onclick="requestVerification()">🔷 Verification Request পাঠান</button>
-        <p style="font-size:12px; color:var(--text3); margin-top:8px;">Admin আপনার request review করে verified করবে।</p>
-      `;
+      verifyEl.innerHTML=`<button class="verify-request-btn" onclick="requestVerification()">🔷 Verification Request পাঠান</button><p style="font-size:12px;color:var(--text3);margin-top:8px;">Admin আপনার request review করে verified করবে।</p>`;
     }
   }
 
   async function requestVerification() {
     try {
-      const r = await fetch(`${API}/api/tickets`, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ userId: currentUser._id, userName: currentUser.name, userEmail: currentUser.email, subject: '🔷 ID Verification Request', message: `আমি আমার account verify করতে চাই। নাম: ${currentUser.name}, Email: ${currentUser.email}` })
-      });
+      const r = await fetch(`${API}/api/tickets`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId:currentUser._id,userName:currentUser.name,userEmail:currentUser.email,subject:'🔷 ID Verification Request',message:`আমি account verify করতে চাই। নাম: ${currentUser.name}, Email: ${currentUser.email}`}) });
       const d = await r.json();
       if (d.success) { alert('Verification request পাঠানো হয়েছে!'); loadNotifications(); loadMyTickets(); }
     } catch {}
@@ -749,12 +844,12 @@
       const r = await fetch(`${API}/api/tickets/user/${currentUser._id}`);
       const d = await r.json();
       const container = document.getElementById('myTickets');
-      if (!d.success || !d.tickets.length) { container.innerHTML = '<div style="color:var(--text3); font-size:13px;">এখনো কোনো ticket নেই।</div>'; return; }
-      container.innerHTML = d.tickets.map(t => `
+      if (!d.success||!d.tickets.length) { container.innerHTML='<div style="color:var(--text3);font-size:13px;">এখনো কোনো ticket নেই।</div>'; return; }
+      container.innerHTML = d.tickets.map(t=>`
         <div class="ticket-item">
           <div class="ticket-subject">${esc(t.subject)}</div>
           <div class="ticket-msg">${esc(t.message)}</div>
-          ${t.adminReply ? `<div class="ticket-reply">💬 Admin: ${esc(t.adminReply)}</div>` : ''}
+          ${t.adminReply?`<div class="ticket-reply">💬 Admin: ${esc(t.adminReply)}</div>`:''}
           <div class="ticket-footer">
             <span>${formatDate(t.createdAt)}</span>
             <span class="status-badge status-${t.status}">${t.status==='open'?'অপেক্ষায়':t.status==='replied'?'✅ Reply এসেছে':'বন্ধ'}</span>
@@ -766,25 +861,24 @@
 
   document.getElementById('ticketForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const subject = document.getElementById('ticketSubject').value;
-    const message = document.getElementById('ticketMsg').value;
+    const subject=document.getElementById('ticketSubject').value;
+    const message=document.getElementById('ticketMsg').value;
     try {
-      const r = await fetch(`${API}/api/tickets`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: currentUser._id, userName: currentUser.name, userEmail: currentUser.email, subject, message }) });
+      const r = await fetch(`${API}/api/tickets`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId:currentUser._id,userName:currentUser.name,userEmail:currentUser.email,subject,message}) });
       const d = await r.json();
-      const msg = document.getElementById('ticketMsg2');
-      msg.textContent = d.message; msg.className = `msg ${d.success ? 'success' : 'error'}`;
-      if (d.success) { document.getElementById('ticketForm').reset(); setTimeout(() => { msg.className='msg'; loadMyTickets(); loadNotifications(); }, 1500); }
+      const msg=document.getElementById('ticketMsg2');
+      msg.textContent=d.message; msg.className=`msg ${d.success?'success':'error'}`;
+      if (d.success) { document.getElementById('ticketForm').reset(); setTimeout(()=>{ msg.className='msg'; loadMyTickets(); },1500); }
     } catch {}
   });
 
-  // HELPERS
-  function esc(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-  function formatDate(d) { return new Date(d).toLocaleDateString('bn-BD', { year:'numeric', month:'long', day:'numeric' }); }
+  function esc(s) { return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function formatDate(d) { return new Date(d).toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'}); }
   function timeAgo(d) {
-    const diff = (Date.now() - new Date(d)) / 1000;
-    if (diff < 60) return 'এইমাত্র';
-    if (diff < 3600) return `${Math.floor(diff/60)} মিনিট আগে`;
-    if (diff < 86400) return `${Math.floor(diff/3600)} ঘণ্টা আগে`;
+    const diff=(Date.now()-new Date(d))/1000;
+    if (diff<60) return 'এইমাত্র';
+    if (diff<3600) return `${Math.floor(diff/60)} মিনিট আগে`;
+    if (diff<86400) return `${Math.floor(diff/3600)} ঘণ্টা আগে`;
     return `${Math.floor(diff/86400)} দিন আগে`;
   }
 </script>
