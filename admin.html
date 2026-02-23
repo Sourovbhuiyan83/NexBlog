@@ -292,10 +292,10 @@
         return `
           <tr>
             <td>${i+1}</td>
-            <td><div style="display:flex;align-items:center;gap:8px;">${avatarHtml}<span>${esc(u.name)}</span>${u.isVerified?'<span style="color:#3b82f6;font-size:13px;">✔️</span>':''}</div></td>
+            <td><div style="display:flex;align-items:center;gap:8px;">${avatarHtml}<span>${esc(u.name)}</span>${u.isVerified?'<span style="color:#3b82f6;font-size:13px;"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"></span>':''}</div></td>
             <td style="color:var(--text3)">${esc(u.email)}</td>
             <td>
-              ${u.isVerified ? '<span class="badge badge-blue">✔️ Verified</span>' : '<span class="badge badge-gray">Unverified</span>'}
+              ${u.isVerified ? '<span class="badge badge-blue"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"> Verified</span>' : '<span class="badge badge-gray">Unverified</span>'}
               ${u.isBanned ? ' <span class="badge badge-red">Banned</span>' : ''}
             </td>
             <td style="color:var(--text3)">${fDate(u.createdAt)}</td>
@@ -303,7 +303,7 @@
               <button class="act-btn ab-purple" onclick="openReset('${u._id}','${esc(u.name)}')">🔑 Reset</button>
               ${u.isVerified
                 ? `<button class="act-btn ab-yellow" onclick="toggleVerify('${u._id}',false)">❌ Unverify</button>`
-                : `<button class="act-btn ab-blue" onclick="toggleVerify('${u._id}',true)">✔️ Verify</button>`}
+                : `<button class="act-btn ab-blue" onclick="toggleVerify('${u._id}',true)"><img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;"> Verify</button>`}
               ${u.isBanned
                 ? `<button class="act-btn ab-green" onclick="toggleBan('${u._id}',false)">🔓 Unban</button>`
                 : `<button class="act-btn ab-yellow" onclick="toggleBan('${u._id}',true)">🚫 Ban</button>`}
@@ -325,7 +325,7 @@
         <tr>
           <td>${i+1}</td>
           <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(b.title)}</td>
-          <td>${esc(b.authorName)} ${b.authorVerified?'✔️':''}</td>
+          <td>${esc(b.authorName)} ${b.authorVerified?'<img src="https://res.cloudinary.com/dhskhmoap/image/upload/v1771854690/552821-xverified_jxlryo.png" style="width:16px;height:16px;vertical-align:middle;">':''}</td>
           <td style="color:var(--text3)">${fDate(b.createdAt)}</td>
           <td><button class="act-btn ab-red" onclick="deleteBlog('${b._id}')">🗑 Delete</button></td>
         </tr>
